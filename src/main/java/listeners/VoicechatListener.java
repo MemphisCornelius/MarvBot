@@ -46,7 +46,9 @@ public class VoicechatListener extends ListenerAdapter {
                     //System.out.println("changed to default");
                 }
             }
-        } catch (NullPointerException | IndexOutOfBoundsException  e) {
+        } catch (NullPointerException e) {
+            vc.getManager().setName(voiceChannelName.get(vc.getId())).queue();
+        } catch (IndexOutOfBoundsException  e) {
         }
     }
 
