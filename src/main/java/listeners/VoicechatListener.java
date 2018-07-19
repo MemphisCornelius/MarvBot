@@ -20,7 +20,7 @@ public class VoicechatListener extends ListenerAdapter {
         for (Member m : list1) {
             for (Member m1 : list2) {
 
-                if (!m.getGame().getName().toLowerCase().equals(m1.getGame().getName().toUpperCase())) {
+                if (!m.getGame().getName().toLowerCase().equals(m1.getGame().getName().toLowerCase())) {
                     return false;
                 }
             }
