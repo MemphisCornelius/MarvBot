@@ -24,14 +24,14 @@ public class VoicechatListener extends ListenerAdapter {
             for (Member m1 : list2) {
 
                 if (!m.getGame().getName().toLowerCase().equals(m1.getGame().getName().toLowerCase())) {
-                    i = i + 1;
-                }else {
                     i = i - 1;
+                }else {
+                    i = i + 1;
                 }
             }
         }
 
-        return i >= halfSize;
+        return i > halfSize;
 
     }
 
