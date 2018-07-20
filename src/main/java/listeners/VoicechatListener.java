@@ -16,16 +16,23 @@ public class VoicechatListener extends ListenerAdapter {
     private static HashMap<String, String> voiceChannelName = new HashMap<>();
 
     private boolean compareLists(List<Member> list1, List<Member> list2) {
+
+        int i = 0;
+        int halfSize = list1.size() / 2;
         //System.out.println("called compareLists");
         for (Member m : list1) {
             for (Member m1 : list2) {
 
                 if (!m.getGame().getName().toLowerCase().equals(m1.getGame().getName().toLowerCase())) {
-                    return false;
+                    i = i + 1;
+                }else {
+                    i = i - 1;
                 }
             }
         }
-        return true;
+
+        return i >= halfSize;
+
     }
 
     public static HashMap<String, String> getVoiceChannelName() {
