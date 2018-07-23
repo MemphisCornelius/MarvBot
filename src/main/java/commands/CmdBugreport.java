@@ -1,14 +1,19 @@
 package commands;
 
+import core.Main;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.entities.User;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import org.kohsuke.github.GHEventPayload;
+import org.kohsuke.github.GHIssueBuilder;
+import org.kohsuke.github.GHRepository;
 import util.Config;
 import util.MessageMask;
 import util.Time;
 
 import java.awt.*;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.OffsetDateTime;
@@ -17,6 +22,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class CmdBugreport implements Command {
+
 
     private EmbedBuilder done = new EmbedBuilder().setColor(Color.green).setTitle("Done!");
 

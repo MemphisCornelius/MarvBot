@@ -17,6 +17,10 @@ public class Config {
     //GAME
     public static final String GAME = "-help";
 
+    //GITHUB
+    public static final String GITHUB_LOGIN = "DiscordBotMarv";
+    public static final String GITHUB_OAUTH = " 8399ff717e19f6b68a85ad9f70a7e7d0bccf7e33";
+
     //VOICE LISTENER CHANNEL
     public static final String CHANNEL_VOICE_LISTENER = "log";
     public static final String CHANNEL_GUILD_LISTENER = "log";
@@ -35,5 +39,6 @@ public class Config {
     public static final String CMD_DEBUG = "debug";
     public static final String CMD_RESTART = "restart";
     public static final String CMD_VERSION = "version";
+    public static final String CMD_GITHUBISSUE = "ghticket";
 
 }

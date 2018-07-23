@@ -54,7 +54,13 @@ public class CmdHelp implements Command {
                     break;
 
                 case Config.CMD_DEBUG:
-                    MessageMask.help(tc, user, String.format("Toggls the debug mode\nThis command is owner only!"));
+                    MessageMask.help(tc, user,"Get special information.");
+                    break;
+
+                case Config.CMD_GITHUBISSUE:
+                    MessageMask.help(tc, user, String.format("Create a GitHub ticket.\n\n" +
+                            "**Usage**:\n :white_small_square: `%s%s` <Label number> <Ticket description>\n\n" +
+                            "LabelNumbers:\n1: bug, 2: duplicate, 3: enhancement, 4: help wanted, 5: invalid, 6: question", Config.PREFIX, Config.CMD_GITHUBISSUE));
 
                 case Config.CMD_HELP:
                     MessageMask.help(tc, user, String.format("Shows all commands.\n\n" +
@@ -79,11 +85,13 @@ public class CmdHelp implements Command {
                 case Config.CMD_RESTART:
                     MessageMask.help(tc, user, String.format("Restart the bot. This command is owner only!\n\n" +
                             "**Usage**:\n :white_small_square: `%s%s`", Config.PREFIX, Config.CMD_RESTART));
+                    break;
 
                 case Config.CMD_VERSION:
                     MessageMask.help(tc, user, String.format("Shows JDA and/or JAVA version.\n\n" +
                             "**Usage**\n" +
                             ":white_small_square: `%s%s` <[jda/JDA] / [java/JAVA]>", Config.PREFIX, Config.CMD_VERSION));
+                    break;
 
                 case Config.CMD_ZNAKE:
                     MessageMask.help(tc, user, String.format("Play the game `%s`! \n\n**Rules:** Collect the two gold nuggets (€) and escape through the door (#) to win the game!\n" +
@@ -126,6 +134,6 @@ public class CmdHelp implements Command {
 
 class CommandSortener {
 
-    static Map<String, Command> commandsSorted = new TreeMap<String, Command>(CommandHandler.commands);
+    static Map<String, Command> commandsSorted = new TreeMap<>(CommandHandler.commands);
 
 }
