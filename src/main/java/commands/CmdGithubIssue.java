@@ -49,7 +49,7 @@ public class CmdGithubIssue implements Command {
                 content = content.replaceFirst(args[0], "");
 
                 try {
-                    GHIssueBuilder issueBuilder = Main.repo.createIssue("Issue reported by" + event.getAuthor());
+                    GHIssueBuilder issueBuilder = Main.getRepo().createIssue("Issue reported by" + event.getAuthor());
                     GHIssue issue = issueBuilder.
                             label(getLabelByNumber(args[0])).
                             body(content).
