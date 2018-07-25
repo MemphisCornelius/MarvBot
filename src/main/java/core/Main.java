@@ -15,11 +15,7 @@ public class Main {
 
     private static JDABuilder builder;
     private static GitHub gitHub;
-    private static GHRepository repo;
-
-    public static GHRepository getRepo() {
-        return repo;
-    }
+    public static GHRepository repo;
 
     public static void main(String[] args) {
 
