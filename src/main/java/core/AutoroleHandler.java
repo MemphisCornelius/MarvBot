@@ -22,7 +22,7 @@ public class AutoroleHandler extends ListenerAdapter {
 
         for (String r : roles) {
 
-            g.getController().addSingleRoleToMember(member, g.getRoleById(r));
+            g.getController().addSingleRoleToMember(member, g.getRoleById(r)).queue();
 
         }
     }
