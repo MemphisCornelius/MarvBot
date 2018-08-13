@@ -84,8 +84,8 @@ public class CmdAutorole implements Command {
         switch (args[0]) {
             case "set":
             case "add":
-                mentionedRole = event.getMessage().getMentionedRoles().get(0).getId();
                 try {
+                    mentionedRole = event.getMessage().getMentionedRoles().get(0).getId();
                     if (!roles.contains(mentionedRole)) {
                         roles.add(mentionedRole);
                         autoroles.replace(g, roles);
@@ -104,9 +104,9 @@ public class CmdAutorole implements Command {
             case "unset":
             case "delete":
             case "remove":
-                mentionedRole = event.getMessage().getMentionedRoles().get(0).getId();
                 if (autoroles.containsKey(g)) {
                     try {
+                        mentionedRole = event.getMessage().getMentionedRoles().get(0).getId();
                         if (roles.contains(mentionedRole)) {
                             roles.remove(mentionedRole);
                             autoroles.replace(g, roles);
