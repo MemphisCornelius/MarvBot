@@ -34,12 +34,21 @@ public class CmdHelp implements Command {
                     break;
 
                 case Config.CMD_AUTOCHAN:
-                    MessageMask.help(tc, user, String.format("Setup Autochannels\n\n" +
+                    MessageMask.help(tc, user, String.format("Setup autochannels\n\n" +
                                     "**Usage:**\n" +
-                                    ":white_small_square:  `%s%s set <Chan ID>`  -  Set voice chan as auto channel\n" +
-                                    ":white_small_square:  `%s%s unset <Chan ID>`  -  Unset voice chan as auto chan\n" +
-                                    ":white_small_square:  `%s%s list`  -  Display all registered auto chans\n",
+                                    ":white_small_square: `%s%s set <Chan ID>` - Set voice chan as auto channel\n" +
+                                    ":white_small_square: `%s%s unset <Chan ID>` - Unset voice chan as auto chan\n" +
+                                    ":white_small_square: `%s%s list` - Display all registered auto chans\n",
                             Config.PREFIX, Config.CMD_AUTOCHAN, Config.PREFIX, Config.CMD_AUTOCHAN, Config.PREFIX, Config.CMD_AUTOCHAN));
+                    break;
+
+                case Config.CMD_AUTOROLE:
+                    MessageMask.help(tc, user, String.format("Setup autoroles\n\n" +
+                            "**Usage:**\n" +
+                            ":white_small_square: `%s%s set <RoleID>` - Set role as autorole.\n" +
+                            ":white_small_square: `%s%s unset <RoleID>` - Unset role as autorole.\n" +
+                            ":white_small_square: `%s%s list` - Display all registered autoroles.",
+                            Config.PREFIX, Config.CMD_AUTOROLE, Config.PREFIX, Config.CMD_AUTOROLE, Config.PREFIX, Config.CMD_AUTOROLE));
                     break;
 
                 case Config.CMD_BUGREPORT:
@@ -61,6 +70,7 @@ public class CmdHelp implements Command {
                     MessageMask.help(tc, user, String.format("Create a GitHub ticket.\n\n" +
                             "**Usage**:\n :white_small_square: `%s%s` <Label number> <Ticket description>\n\n" +
                             "LabelNumbers:\n1: bug, 2: duplicate, 3: enhancement, 4: help wanted, 5: invalid, 6: question", Config.PREFIX, Config.CMD_GITHUBISSUE));
+                    break;
 
                 case Config.CMD_HELP:
                     MessageMask.help(tc, user, String.format("Shows all commands.\n\n" +
@@ -82,9 +92,9 @@ public class CmdHelp implements Command {
                             "**Usage**:\n :white_small_square: `%s%s` <User> <Message>", Config.PREFIX, Config.CMD_POKE));
                     break;
 
-                case Config.CMD_RESTART:
+                case Config.CMD_SHUTDOWN:
                     MessageMask.help(tc, user, String.format("Restart the bot. This command is owner only!\n\n" +
-                            "**Usage**:\n :white_small_square: `%s%s`", Config.PREFIX, Config.CMD_RESTART));
+                            "**Usage**:\n :white_small_square: `%s%s`", Config.PREFIX, Config.CMD_SHUTDOWN));
                     break;
 
                 case Config.CMD_VERSION:
@@ -122,7 +132,7 @@ public class CmdHelp implements Command {
 
     @Override
     public void executed(boolean success, MessageReceivedEvent event) {
-        System.out.println(" [COMMAND] " + Time.getTime() + Config.CMD_HELP.toUpperCase() + " was executed by " + event.getMessage().getAuthor());
+        System.out.println("[COMMAND] " + Time.getTime() + Config.CMD_HELP.toUpperCase() + " was executed by " + event.getMessage().getAuthor());
     }
 
     @Override

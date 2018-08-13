@@ -45,7 +45,7 @@ public class CmdPing implements Command {
 
     @Override
     public void executed(boolean success, MessageReceivedEvent event) {
-        System.out.println(" [COMMAND] " + Time.getTime() + Config.CMD_PING.toUpperCase() + " was executed by " + event.getMessage().getAuthor());
+        System.out.println("[COMMAND] " + Time.getTime() + Config.CMD_PING.toUpperCase() + " was executed by " + event.getMessage().getAuthor());
     }
 
     @Override

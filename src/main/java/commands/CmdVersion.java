@@ -1,5 +1,6 @@
 package commands;
 
+import core.Main;
 import net.dv8tion.jda.core.JDAInfo;
 import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.entities.User;
@@ -12,7 +13,7 @@ import java.awt.*;
 import java.io.IOException;
 import java.text.ParseException;
 
-public class CmdVersion implements Command{
+public class CmdVersion implements Command {
     @Override
     public boolean called(String[] args, MessageReceivedEvent event) {
         return false;
@@ -24,7 +25,7 @@ public class CmdVersion implements Command{
         TextChannel tc = event.getTextChannel();
         User user = event.getAuthor();
 
-        switch (args.length){
+        switch (args.length) {
             case 0:
                 MessageMask.msg(tc, user, Color.BLACK, String.format("JDA: %s\nJAVA: %s", JDAInfo.VERSION, System.getProperty("java.version")));
                 break;
@@ -36,8 +37,11 @@ public class CmdVersion implements Command{
                         break;
                     case "JAVA":
                     case "java":
-                        MessageMask.help(tc, user, String.format("JAVA: %s",System.getProperty("java.version")));
+                        MessageMask.help(tc, user, String.format("JAVA: %s", System.getProperty("java.version")));
                         break;
+                    case "bot":
+                    case "BOT":
+                        MessageMask.help(tc, user, String.format("BOT: %s", Main.getRepo().getLatestRelease().getName()));
                 }
                 break;
             default:
@@ -49,7 +53,7 @@ public class CmdVersion implements Command{
 
     @Override
     public void executed(boolean success, MessageReceivedEvent event) {
-        System.out.println(" [COMMAND] " + Time.getTime() + Config.CMD_VERSION.toUpperCase() + " was executed by " + event.getMessage().getAuthor());
+        System.out.println("[COMMAND] " + Time.getTime() + Config.CMD_VERSION.toUpperCase() + " was executed by " + event.getMessage().getAuthor());
     }
 
     @Override

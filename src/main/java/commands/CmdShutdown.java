@@ -11,7 +11,7 @@ import java.awt.*;
 import java.io.IOException;
 import java.text.ParseException;
 
-public class CmdRestart implements Command {
+public class CmdShutdown implements Command {
     @Override
     public boolean called(String[] args, MessageReceivedEvent event) {
         return false;
@@ -25,7 +25,7 @@ public class CmdRestart implements Command {
 
         if (event.getAuthor().getId().equals(Config.OWNERID)){
 
-           System.exit(0);
+            System.exit(0);
 
         }else {
             MessageMask.msg(tc, user, Color.RED, "https://vignette.wikia.nocookie.net/timmypedia/images/1/1f/Red-X-in-circle.png/revision/latest?cb=20160924072833",
@@ -36,7 +36,7 @@ public class CmdRestart implements Command {
 
     @Override
     public void executed(boolean success, MessageReceivedEvent event) {
-        System.out.println(" [COMMAND] " + Time.getTime() + Config.CMD_RESTART.toUpperCase() + " was executed by " + event.getMessage().getAuthor());
+        System.out.println("[COMMAND] " + Time.getTime() + Config.CMD_SHUTDOWN.toUpperCase() + " was executed by " + event.getMessage().getAuthor());
     }
 
     @Override

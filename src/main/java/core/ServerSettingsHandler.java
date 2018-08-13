@@ -3,16 +3,21 @@ package core;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 
 class ServerSettingsHandler {
 
-    private static String[] readFile(String datName) {
+    private ServerSettingsHandler() {}
+
+    private static HashMap<String, String> settings = new HashMap<>();
+
+    static void initializeSettings() {
 
         ArrayList<String> lines = new ArrayList<>();
 
         try {
-            FileReader fr = new FileReader(datName);
+            FileReader fr = new FileReader("SERVER_SETTINGS/SETTINGS.txt");
             Scanner sc = new Scanner(fr);
 
             while (sc.hasNext()) {
@@ -20,47 +25,43 @@ class ServerSettingsHandler {
                 lines.add(line);
             }
 
-            return lines.toArray(new String[lines.size()]);
+
 
         } catch (FileNotFoundException e) {
-            System.err.println("Please add a file 'TOKEN' in 'SERVER_SETTINGS'!");
-            return null;
+            System.err.println("Please add a file 'SETTINGS.txt' in 'SERVER_SETTINGS'!");
+        }
 
+        for (int i = 0; i < lines.size(); i++) {
+            String[] split = lines.get(i).split(" ");
+            String key;
+            String value;
+
+            if (split[0].endsWith(":")) {
+                key = split[0].toUpperCase().substring(0, split[0].length() - 1);
+
+                if (split[1].startsWith("\"") && split[1].endsWith("\"")) {
+                    value = split[1].replaceFirst("\"", "");
+                    value = value.substring(0, value.length() - 1);
+
+                    settings.put(key, value);
+
+                }else {
+                    System.err.println("Please check the spelling at the right side of line: " + (i + 1));
+                }
+
+            }else {
+                System.err.println("Please check the spelling st the left side of line: " + (i + 1));
+            }
         }
     }
 
     static String getToken() {
-
-        String[] line = readFile("SERVER_SETTINGS/TOKEN.txt");
-
-        if (line[0] != null) {
-            if (line[0].toUpperCase().startsWith("TOKEN: ")) {
-
-                String[] split = line[0].split(" ");
-
-                if (split[1].startsWith("\"") && split[1].endsWith("\"")) {
-
-                    String token = split[1].replaceFirst("\"", "");
-                    token = token.substring(0, token.length() - 1);
-
-                    return token;
-
-                } else {
-                    System.err.println("Please enter your token in double quotes (\")");
-                    return null;
-                }
-
-            } else {
-                System.err.println("Please enter your token in the fist line with this pattern: \n" +
-                        "TOKEN: \"YOUR-TOKEN-HERE\"");
-                return null;
-            }
-        } else {
-
-
-            System.err.println("Please enter your token in the fist line with the following pattern: \n" +
-                    "\tTOKEN: \"YOUR-TOKEN-HERE\"");
-            return null;
-        }
+        return settings.get("TOKEN");
+    }
+    static String getGHLogin() {
+        return settings.get("GITHUB_LOGIN");
+    }
+    static String getGHOA() {
+        return settings.get("GITHUB_OAUTH");
     }
 }

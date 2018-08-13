@@ -8,6 +8,7 @@ import org.kohsuke.github.GHIssue;
 import org.kohsuke.github.GHIssueBuilder;
 import util.Config;
 import util.MessageMask;
+import util.Time;
 
 import java.awt.Color;
 
@@ -49,7 +50,7 @@ public class CmdGithubIssue implements Command {
                 content = content.replaceFirst(args[0], "");
 
                 try {
-                    GHIssueBuilder issueBuilder = Main.repo.createIssue("Issue reported by" + event.getAuthor());
+                    GHIssueBuilder issueBuilder = Main.getRepo().createIssue("Issue reported by" + event.getAuthor());
                     GHIssue issue = issueBuilder.
                             label(getLabelByNumber(args[0])).
                             body(content).
@@ -79,7 +80,7 @@ public class CmdGithubIssue implements Command {
 
     @Override
     public void executed(boolean success, MessageReceivedEvent event) {
-
+        System.out.println("[COMMAND] " + Time.getTime() + Config.CMD_GITHUBISSUE.toUpperCase() + " was executed by " + event.getMessage().getAuthor());
     }
 
     @Override

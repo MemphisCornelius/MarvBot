@@ -30,7 +30,7 @@ public class CmdAbout implements Command {
 
     @Override
     public void executed(boolean success, MessageReceivedEvent event) {
-        System.out.println(" [COMMAND] " + Time.getTime() + Config.CMD_ABOUT.toUpperCase() + " was executed by " + event.getMessage().getAuthor());
+        System.out.println("[COMMAND] " + Time.getTime() + Config.CMD_ABOUT.toUpperCase() + " was executed by " + event.getMessage().getAuthor());
     }
 
     @Override

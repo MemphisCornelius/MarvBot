@@ -15,9 +15,15 @@ public class Main {
 
     private static JDABuilder builder;
     private static GitHub gitHub;
-    public static GHRepository repo;
+    private static GHRepository repo;
+
+    public static GHRepository getRepo() {
+        return repo;
+    }
 
     public static void main(String[] args) {
+
+        ServerSettingsHandler.initializeSettings();
 
         builder = new JDABuilder(AccountType.BOT);
 
@@ -31,12 +37,11 @@ public class Main {
 
         try {
             builder.buildBlocking();
-            gitHub = GitHub.connect(Config.GITHUB_LOGIN, Config.GITHUB_OAUTH);
+            gitHub = GitHub.connect(ServerSettingsHandler.getGHLogin(), ServerSettingsHandler.getGHOA());
             repo = gitHub.getRepository("MemphisCornelius/MarvBot");
         } catch (LoginException | InterruptedException | IOException e) {
             e.printStackTrace();
         }
-
     }
 
     //LISTENERS
@@ -46,6 +51,7 @@ public class Main {
         builder.addEventListener(new MessageListener());
         builder.addEventListener(new AutochannelHandler());
         builder.addEventListener(new VoicechatListener());
+        builder.addEventListener(new AutoroleHandler());
     }
 
     //COMMANDS
@@ -60,8 +66,9 @@ public class Main {
         CommandHandler.commands.put(Config.CMD_ABOUT, new CmdAbout());
       //CommandHandler.commands.put(Config.CMD_BUGREPORT, new CmdBugreport());
         CommandHandler.commands.put(Config.CMD_DEBUG, new CmdDebug());
-        CommandHandler.commands.put(Config.CMD_RESTART, new CmdRestart());
+        CommandHandler.commands.put(Config.CMD_SHUTDOWN, new CmdShutdown());
         CommandHandler.commands.put(Config.CMD_VERSION, new CmdVersion());
         CommandHandler.commands.put(Config.CMD_GITHUBISSUE, new CmdGithubIssue());
+        CommandHandler.commands.put(Config.CMD_AUTOROLE, new CmdAutorole());
     }
 }

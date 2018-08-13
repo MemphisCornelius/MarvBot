@@ -35,10 +35,11 @@ public class LogListener extends ListenerAdapter {
     @Override
     public void onGuildVoiceJoin(GuildVoiceJoinEvent event) {
 
-        MessageMask.msg(event.getGuild().getTextChannelsByName(Config.CHANNEL_VOICE_LISTENER,
+        MessageMask.log(event.getGuild().getTextChannelsByName(Config.CHANNEL_VOICE_LISTENER,
                 true).get(0),
                 event.getMember().getUser(),
                 Color.green,
+                "VCID: " + event.getChannelJoined().getId(),
                 "joined #" + event.getChannelJoined().getName());
 
     }
@@ -46,10 +47,11 @@ public class LogListener extends ListenerAdapter {
     @Override
     public void onGuildVoiceMove(GuildVoiceMoveEvent event) {
 
-        MessageMask.msg(event.getGuild().getTextChannelsByName(Config.CHANNEL_VOICE_LISTENER,
+        MessageMask.log(event.getGuild().getTextChannelsByName(Config.CHANNEL_VOICE_LISTENER,
                 true).get(0),
                 event.getMember().getUser(),
                 Color.yellow,
+                "VCID: " + event.getChannelJoined().getId(),
                 "moved from #" + event.getChannelLeft().getName() + " to #" + event.getChannelJoined().getName());
 
     }
@@ -57,10 +59,11 @@ public class LogListener extends ListenerAdapter {
     @Override
     public void onGuildVoiceLeave(GuildVoiceLeaveEvent event) {
 
-        MessageMask.msg(event.getGuild().getTextChannelsByName(Config.CHANNEL_VOICE_LISTENER,
+        MessageMask.log(event.getGuild().getTextChannelsByName(Config.CHANNEL_VOICE_LISTENER,
                 true).get(0),
                 event.getMember().getUser(),
                 Color.red,
+                "VCID: " + event.getChannelLeft().getId(),
                 "left #" + event.getChannelLeft().getName());
 
     }

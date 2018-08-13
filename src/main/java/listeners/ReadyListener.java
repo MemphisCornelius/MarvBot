@@ -12,5 +12,6 @@ public class ReadyListener extends ListenerAdapter {
 
         commands.CmdAutochannel.load(event.getJDA());
         commands.CmdLootbox.load();
+        commands.CmdAutorole.load();
     }
 }

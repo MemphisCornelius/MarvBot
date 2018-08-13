@@ -85,27 +85,27 @@ public class CmdLootbox implements Command {
             if (rn <= 50) {
                 MessageMask.msg(tc, user, new Color(126, 126,126),"You've obtained a common lootbox!");
 
-                System.out.println(" [LOOTBOX] " + Time.getTime() + event.getMessage().getAuthor() + "obtained a common lootbox");
+                System.out.println("[LOOTBOX] " + Time.getTime() + event.getMessage().getAuthor() + "obtained a common lootbox");
 
             } else if (rn <= 70) {
                 MessageMask.msg(tc, user, new Color(23, 162, 63),"You've obtained a uncommon lootbox!");
 
-                System.out.println(" [LOOTBOX] " + Time.getTime() + event.getMessage().getAuthor() + "obtained an uncommon lootbox");
+                System.out.println("[LOOTBOX] " + Time.getTime() + event.getMessage().getAuthor() + "obtained an uncommon lootbox");
 
             } else if (rn <= 85) {
                 MessageMask.msg(tc, user, new Color(31, 73, 191),"You've obtained a rare lootbox!");
 
-                System.out.println(" [LOOTBOX] " + Time.getTime() + event.getMessage().getAuthor() + "obtained a rare lootbox");
+                System.out.println("[LOOTBOX] " + Time.getTime() + event.getMessage().getAuthor() + "obtained a rare lootbox");
 
             } else if (rn <= 95) {
                 MessageMask.msg(tc, user, new Color(186, 0, 161),"You've obtained a epic lootbox!");
 
-                System.out.println(" [LOOTBOX] " + Time.getTime() + event.getMessage().getAuthor() + "obtained am epic lootbox");
+                System.out.println("[LOOTBOX] " + Time.getTime() + event.getMessage().getAuthor() + "obtained am epic lootbox");
 
             } else if (rn <= 100) {
                 MessageMask.msg(tc, user, new Color(228, 189, 36),"You've obtained a legendary lootbox!");
 
-                System.out.println(" [LOOTBOX] " + Time.getTime() + event.getMessage().getAuthor() + ">obtained a legendary lootbox");
+                System.out.println("[LOOTBOX] " + Time.getTime() + event.getMessage().getAuthor() + ">obtained a legendary lootbox");
             }
 
 
@@ -116,7 +116,7 @@ public class CmdLootbox implements Command {
             }
             save();
         } else {
-            MessageMask.msg(tc, user, Color.RED,"You can only get one lootbox per day!");
+            MessageMask.msg(tc, user, Color.RED,"You can only get one lootbox in 24 hours!");
         }
 
         return false;
@@ -124,7 +124,7 @@ public class CmdLootbox implements Command {
 
     @Override
     public void executed(boolean success, MessageReceivedEvent event) {
-        System.out.println(" [COMMAND] " + Time.getTime() + Config.CMD_LOOTBOX.toUpperCase() + " was executed by " + event.getMessage().getAuthor());
+        System.out.println("[COMMAND] " + Time.getTime() + Config.CMD_LOOTBOX.toUpperCase() + " was executed by " + event.getMessage().getAuthor());
 
     }
 

@@ -9,7 +9,7 @@ public class Time {
     private Time() {}
 
     public static String getTime() {
-        DateFormat dateFormat = new SimpleDateFormat("[dd.MM.yyyy - HH:mm:ss]");
+        DateFormat dateFormat = new SimpleDateFormat("[dd.MM.yyyy - HH:mm:ss] ");
         return dateFormat.format(new Date());
     }
 }
