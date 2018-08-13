@@ -45,8 +45,8 @@ public class CmdHelp implements Command {
                 case Config.CMD_AUTOROLE:
                     MessageMask.help(tc, user, String.format("Setup autoroles\n\n" +
                             "**Usage:**\n" +
-                            ":white_small_square: `%s%s set <RoleID>` - Set role as autorole.\n" +
-                            ":white_small_square: `%s%s unset <RoleID>` - Unset role as autorole.\n" +
+                            ":white_small_square: `%s%s set <Role>` - Set role as autorole.\n" +
+                            ":white_small_square: `%s%s unset <Role>` - Unset role as autorole.\n" +
                             ":white_small_square: `%s%s list` - Display all registered autoroles.",
                             Config.PREFIX, Config.CMD_AUTOROLE, Config.PREFIX, Config.CMD_AUTOROLE, Config.PREFIX, Config.CMD_AUTOROLE));
                     break;
