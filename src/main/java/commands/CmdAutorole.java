@@ -85,7 +85,7 @@ public class CmdAutorole implements Command {
             case "set":
             case "add":
                 mentionedRole = event.getMessage().getMentionedRoles().get(0).getId();
-                if (event.getGuild().getRolesByName(args[1].substring(1), false).get(0).getId().equals(mentionedRole)) {
+                try {
                     if (!roles.contains(mentionedRole)) {
                         roles.add(mentionedRole);
                         autoroles.replace(g, roles);
@@ -95,7 +95,7 @@ public class CmdAutorole implements Command {
                         MessageMask.msg(tc, user, Color.RED, "https://vignette.wikia.nocookie.net/timmypedia/images/1/1f/Red-X-in-circle.png/revision/latest?cb=20160924072833",
                                 "ERROR!\n\n This role is already a autorole!");
                     }
-                } else {
+                } catch (IndexOutOfBoundsException e) {
                     MessageMask.msg(tc, user, Color.RED, "https://vignette.wikia.nocookie.net/timmypedia/images/1/1f/Red-X-in-circle.png/revision/latest?cb=20160924072833",
                             "ERROR!\n\nYou have to name the role you want to add!");
                 }
@@ -106,7 +106,7 @@ public class CmdAutorole implements Command {
             case "remove":
                 mentionedRole = event.getMessage().getMentionedRoles().get(0).getId();
                 if (autoroles.containsKey(g)) {
-                    if (event.getGuild().getRolesByName(args[1].substring(1), false).get(0).getId().equals(mentionedRole)) {
+                    try {
                         if (roles.contains(mentionedRole)) {
                             roles.remove(mentionedRole);
                             autoroles.replace(g, roles);
@@ -116,7 +116,7 @@ public class CmdAutorole implements Command {
                             MessageMask.msg(tc, user, Color.RED, "https://vignette.wikia.nocookie.net/timmypedia/images/1/1f/Red-X-in-circle.png/revision/latest?cb=20160924072833",
                                     "ERROR!\n\nThis role isn`t a autorole!");
                         }
-                    }else {
+                    }catch (IndexOutOfBoundsException e) {
                         MessageMask.msg(tc, user, Color.RED, "https://vignette.wikia.nocookie.net/timmypedia/images/1/1f/Red-X-in-circle.png/revision/latest?cb=20160924072833",
                                 "ERROR!\n\nYou have to name the role you want to remove!");
                     }
@@ -140,12 +140,12 @@ public class CmdAutorole implements Command {
                     sb.append("\n");
                 }
 
-                MessageMask.msg(event.getTextChannel(), event.getAuthor(), Color.red, sb.toString());
+                MessageMask.msg(event.getTextChannel(), event.getAuthor(), Color.BLUE, sb.toString());
 
                 break;
 
             default:
-                MessageMask.msg(tc, user, Color.BLUE, "https://vignette.wikia.nocookie.net/timmypedia/images/1/1f/Red-X-in-circle.png/revision/latest?cb=20160924072833",
+                MessageMask.msg(tc, user, Color.RED, "https://vignette.wikia.nocookie.net/timmypedia/images/1/1f/Red-X-in-circle.png/revision/latest?cb=20160924072833",
                         "ERROR!\n\nYou have to use one of these keywords: set, add, uset, remove, delete, show list!\n\nFor more information use " +
                                 Config.PREFIX + Config.CMD_HELP + " " + Config.CMD_AUTOROLE);
         }
