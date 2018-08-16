@@ -37,7 +37,7 @@ public class Main {
 
         try {
             builder.build().awaitReady();
-            gitHub = GitHub.connect(ServerSettingsHandler.getGHLogin(), ServerSettingsHandler.getGHOA());
+            gitHub = GitHub.connectUsingPassword(ServerSettingsHandler.getGHLogin(), ServerSettingsHandler.getGHPW());
             repo = gitHub.getRepository("MemphisCornelius/MarvBot");
         } catch (LoginException | IOException | InterruptedException e) {
             e.printStackTrace();

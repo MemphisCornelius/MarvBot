@@ -62,6 +62,9 @@ class ServerSettingsHandler {
         return settings.get("GITHUB_LOGIN");
     }
     static String getGHOA() {
-        return settings.get("GITHUB_OAUTH");
+        return  settings.get("GITHUB_OA");
+    }
+    static String getGHPW() {
+        return settings.get("GITHUB_PW");
     }
 }
