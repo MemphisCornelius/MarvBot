@@ -36,10 +36,10 @@ public class Main {
         addCommands();
 
         try {
-            builder.buildBlocking();
+            builder.build().awaitReady();
             gitHub = GitHub.connect(ServerSettingsHandler.getGHLogin(), ServerSettingsHandler.getGHOA());
             repo = gitHub.getRepository("MemphisCornelius/MarvBot");
-        } catch (LoginException | InterruptedException | IOException e) {
+        } catch (LoginException | IOException | InterruptedException e) {
             e.printStackTrace();
         }
     }
@@ -50,8 +50,8 @@ public class Main {
         builder.addEventListener(new LogListener());
         builder.addEventListener(new MessageListener());
         builder.addEventListener(new AutochannelHandler());
-        builder.addEventListener(new VoicechatListener());
         builder.addEventListener(new AutoroleHandler());
+        builder.addEventListener(new DVCbGHandler());
     }
 
     //COMMANDS

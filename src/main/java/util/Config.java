@@ -17,9 +17,8 @@ public class Config {
     //GAME
     public static final String GAME = "-help";
 
-    //VOICE LISTENER CHANNEL
-    public static final String CHANNEL_VOICE_LISTENER = "log";
-    public static final String CHANNEL_GUILD_LISTENER = "log";
+    //LOG LISTENER CHANNEL
+    public static final String CHANNEL_LOG_LISTENER = "log";
 
     //COMMANDS
     public static final String CMD_PING = "ping";

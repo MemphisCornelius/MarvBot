@@ -1,14 +1,11 @@
 package commands;
 
-import listeners.VoicechatListener;
 import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.entities.User;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import util.Config;
-import util.MessageMask;
 import util.Time;
 
-import java.awt.*;
 import java.io.IOException;
 import java.text.ParseException;
 
@@ -28,9 +25,6 @@ public class CmdDebug implements Command {
 
             switch (args[0]) {
 
-                case "DVCbG":
-                    MessageMask.msg(tc, user, Color.gray, VoicechatListener.getVoiceChannelName().toString());
-                    break;
                 default:
                     break;
             }

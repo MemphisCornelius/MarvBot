@@ -20,8 +20,8 @@ public class LogListener extends ListenerAdapter {
 
         //event.getGuild().getController().createRole().setName("MarvBot-Mod").complete();
 
-        event.getGuild().getController().createTextChannel("log").setTopic("This is the log-channel for the <@388355915583324160>.").
-                complete();
+        event.getGuild().getController().createTextChannel(Config.CHANNEL_LOG_LISTENER).setTopic("This is the log-channel for the <@388355915583324160>.").
+                queue();
 
     }
 
@@ -35,7 +35,7 @@ public class LogListener extends ListenerAdapter {
     @Override
     public void onGuildVoiceJoin(GuildVoiceJoinEvent event) {
 
-        MessageMask.log(event.getGuild().getTextChannelsByName(Config.CHANNEL_VOICE_LISTENER,
+        MessageMask.log(event.getGuild().getTextChannelsByName(Config.CHANNEL_LOG_LISTENER,
                 true).get(0),
                 event.getMember().getUser(),
                 Color.green,
@@ -47,7 +47,7 @@ public class LogListener extends ListenerAdapter {
     @Override
     public void onGuildVoiceMove(GuildVoiceMoveEvent event) {
 
-        MessageMask.log(event.getGuild().getTextChannelsByName(Config.CHANNEL_VOICE_LISTENER,
+        MessageMask.log(event.getGuild().getTextChannelsByName(Config.CHANNEL_LOG_LISTENER,
                 true).get(0),
                 event.getMember().getUser(),
                 Color.yellow,
@@ -59,7 +59,7 @@ public class LogListener extends ListenerAdapter {
     @Override
     public void onGuildVoiceLeave(GuildVoiceLeaveEvent event) {
 
-        MessageMask.log(event.getGuild().getTextChannelsByName(Config.CHANNEL_VOICE_LISTENER,
+        MessageMask.log(event.getGuild().getTextChannelsByName(Config.CHANNEL_LOG_LISTENER,
                 true).get(0),
                 event.getMember().getUser(),
                 Color.red,
@@ -71,7 +71,7 @@ public class LogListener extends ListenerAdapter {
     @Override
     public void onGuildMemberJoin(GuildMemberJoinEvent event) {
 
-        MessageMask.msg(event.getGuild().getTextChannelsByName(Config.CHANNEL_GUILD_LISTENER,
+        MessageMask.msg(event.getGuild().getTextChannelsByName(Config.CHANNEL_LOG_LISTENER,
                 true).get(0),
                 event.getMember().getUser(),
                 new Color(20, 90, 10),
@@ -82,7 +82,7 @@ public class LogListener extends ListenerAdapter {
     @Override
     public void onGuildMemberLeave(GuildMemberLeaveEvent event) {
 
-        MessageMask.msg(event.getGuild().getTextChannelsByName(Config.CHANNEL_GUILD_LISTENER,
+        MessageMask.msg(event.getGuild().getTextChannelsByName(Config.CHANNEL_LOG_LISTENER,
                 true).get(0),
                 event.getMember().getUser(),
                 new Color(90, 10, 10),
