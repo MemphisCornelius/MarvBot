@@ -1,15 +1,11 @@
 package commands;
 
-import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import util.Config;
+import util.MessageMask;
 import util.Time;
 
 import java.awt.Color;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
 
 public class CmdPing implements Command {
 
@@ -33,12 +29,10 @@ public class CmdPing implements Command {
     @Override
     public boolean action(String[] args, MessageReceivedEvent event) {
 
-            long ping = event.getJDA().getPing();
+        long ping = event.getJDA().getPing();
 
-            event.getTextChannel().sendMessage(new EmbedBuilder().setColor(getColorByPing(ping)).setDescription(
-                    String.format(":ping_pong:   **Pong!**\n\nThe ping is `%s` ms.",
-                            ping)).setTimestamp(OffsetDateTime.of(LocalDate.now(), LocalTime.now(), ZoneOffset.UTC)).build())
-                    .queue();
+        MessageMask.msg(event.getTextChannel(), event.getAuthor(), getColorByPing(ping), String.format(":ping_pong:   **Pong!**\n\nThe ping is `%s` ms.",
+                ping));
 
         return false;
     }

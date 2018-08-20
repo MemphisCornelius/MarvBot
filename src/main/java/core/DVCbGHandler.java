@@ -21,9 +21,9 @@ import java.util.*;
 
 public class DVCbGHandler extends ListenerAdapter {
 
-    public static HashMap<String, String> vcNames = new HashMap<>();
+    private static HashMap<String, String> vcNames = new HashMap<>();
 
-    public static void save() {
+    private static void save() {
 
         File path = new File("SERVER_SETTINGS/");
         if (!path.exists())
@@ -83,7 +83,7 @@ public class DVCbGHandler extends ListenerAdapter {
             if (m.getGame() != null) {
                 for (Member m1 : members) {
                     if (m1.getGame() != null) {
-                        if (m.getUser().getId().equals(m1.getUser().getId())) {
+                        if (!m.getUser().getId().equals(m1.getUser().getId())) {
                             if (m.getGame().getName().equalsIgnoreCase(m1.getGame().getName())) {
                                 if (!games.containsKey(m.getGame().getName())) {
                                     games.put(m.getGame().getName(), 1);
@@ -106,10 +106,8 @@ public class DVCbGHandler extends ListenerAdapter {
             return vc.getMembers().get(0).getGame().getName();
         }
 
-        if (i > (members.size() / 2)) {
-            if (getKeysFromValue(games, i).size() == 1) {
+        if (i > (members.size() / 2) && getKeysFromValue(games, i).size() == 1) {
                 return getKeysFromValue(games, i).get(0).toString();
-            }
         }
 
         return "";
@@ -129,6 +127,7 @@ public class DVCbGHandler extends ListenerAdapter {
 
     @Override
     public void onGuildJoin(GuildJoinEvent event) {
+
         for (VoiceChannel vc : event.getGuild().getVoiceChannels()) {
             vcNames.put(vc.getId(), vc.getName());
         }
@@ -152,7 +151,7 @@ public class DVCbGHandler extends ListenerAdapter {
 
         AuditLogPaginationAction auditLogs = event.getGuild().getAuditLogs();
         auditLogs.type(ActionType.CHANNEL_UPDATE);
-        auditLogs.limit(1); // take first
+        auditLogs.limit(1);
         auditLogs.queue((entries) -> {
             if (entries.isEmpty()) return;
             AuditLogEntry entry = entries.get(0);

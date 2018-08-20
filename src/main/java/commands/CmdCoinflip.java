@@ -27,7 +27,7 @@ public class CmdCoinflip implements Command {
             int rn = new Random().nextInt(2);
 
             if (rn == 0) {
-                MessageMask.msgWithPicture(tc, user, Color.gray,"https://cdn.discordapp.com/attachments/281445240081088513/457211743924387840/Marvbot_Coin_1.png","Head!");
+                MessageMask.msgWithPicture(tc, user, Color.gray,"https://cdn.discordapp.com/attachments/281445240081088513/457211741512925185/Marvbot_Coin_0.png","Head!");
             } else {
                 MessageMask.msgWithPicture(tc, user, Color.gray,"https://cdn.discordapp.com/attachments/281445240081088513/457211743924387840/Marvbot_Coin_1.png","Tail!");
             }
