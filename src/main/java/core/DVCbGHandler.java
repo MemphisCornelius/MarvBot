@@ -79,6 +79,15 @@ public class DVCbGHandler extends ListenerAdapter {
         Collection<Integer> values;
         int i;
 
+        if (members.size() == 1) {
+            try {
+                return vc.getMembers().get(0).getGame().getName();
+            }catch (NullPointerException e) {
+                return "";
+            }
+
+        }
+
         for (Member m : members) {
             if (m.getGame() != null) {
                 for (Member m1 : members) {
@@ -88,7 +97,8 @@ public class DVCbGHandler extends ListenerAdapter {
                                 if (!games.containsKey(m.getGame().getName())) {
                                     games.put(m.getGame().getName(), 1);
                                 } else {
-                                    games.replace(m.getGame().getName(), games.get(m.getGame().getName()), games.get(m.getGame().getName() + 1));
+                                    int newValue = games.get(m.getGame().getName()) + 1;
+                                    games.replace(m.getGame().getName(), games.get(m.getGame().getName()), newValue);
                                 }
                             }
                         }
@@ -100,10 +110,8 @@ public class DVCbGHandler extends ListenerAdapter {
         try {
             values = games.values();
             i = Collections.max(values);
-        } catch (NoSuchElementException e) {
+        } catch (NoSuchElementException | NullPointerException e) {
             return "";
-        } catch (NullPointerException e) {
-            return vc.getMembers().get(0).getGame().getName();
         }
 
         if (i > (members.size() / 2) && getKeysFromValue(games, i).size() == 1) {
