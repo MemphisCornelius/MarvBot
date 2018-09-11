@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
-class ServerSettingsHandler {
+public class ServerSettingsHandler {
 
     private ServerSettingsHandler() {}
 
@@ -56,7 +56,7 @@ class ServerSettingsHandler {
     }
 
     static String getToken() {
-        return settings.get("TOKEN");
+        return settings.get("DISCORD_TOKEN");
     }
     static String getGHLogin() {
         return settings.get("GITHUB_LOGIN");
@@ -66,5 +66,14 @@ class ServerSettingsHandler {
     }
     static String getGHPW() {
         return settings.get("GITHUB_PW");
+    }
+    public static String getDBUS() {
+        return settings.get("DB_USER");
+    }
+    public static String getDBPW() {
+        return settings.get("DB_PASSWORD");
+    }
+    public static String getDBURL() {
+        return settings.get("DB_URL");
     }
 }

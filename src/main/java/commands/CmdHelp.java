@@ -77,6 +77,11 @@ public class CmdHelp implements Command {
                             "**Usage**:\n :white_small_square: `%s%s`", Config.PREFIX, Config.CMD_HELP));
                     break;
 
+                case Config.CMD_INVENTORY:
+                    MessageMask.help(tc, user, String.format("Lists your inventory.\n\n" +
+                            "**Usage**:\n :white_small_square: `%s%s`", Config.PREFIX, Config.CMD_INVENTORY));
+                    break;
+
                 case Config.CMD_LOOTBOX:
                     MessageMask.help(tc, user, String.format("Get a lootbox (You can only get one per day).\nThese lootboxes don't affect anything at the moment.\n\n" +
                             "**Usage**:\n :white_small_square: `%s%s`", Config.PREFIX, Config.CMD_LOOTBOX));

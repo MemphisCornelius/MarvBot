@@ -36,5 +36,6 @@ public class Config {
     public static final String CMD_VERSION = "version";
     public static final String CMD_GITHUBISSUE = "ghticket";
     public static final String CMD_AUTOROLE = "autorole";
+    public static final String CMD_INVENTORY = "inventory";
 
 }

@@ -11,6 +11,7 @@ import util.Config;
 import javax.security.auth.login.LoginException;
 import java.io.IOException;
 
+
 public class Main {
 
     private static JDABuilder builder;
@@ -70,5 +71,6 @@ public class Main {
         CommandHandler.commands.put(Config.CMD_VERSION, new CmdVersion());
         CommandHandler.commands.put(Config.CMD_GITHUBISSUE, new CmdGithubIssue());
         CommandHandler.commands.put(Config.CMD_AUTOROLE, new CmdAutorole());
+        CommandHandler.commands.put(Config.CMD_INVENTORY, new CmdInventory());
     }
 }

@@ -33,7 +33,7 @@
         <dependency>
             <groupId>net.dv8tion</groupId>
             <artifactId>JDA</artifactId>
-            <version>3.7.1_393</version>
+            <version>3.7.1_421</version>
         </dependency>
         <dependency>
             <groupId>org.controlsfx</groupId>
@@ -49,6 +49,11 @@
             <groupId>org.kohsuke</groupId>
             <artifactId>github-api</artifactId>
             <version>1.93</version>
+        </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>1.4.197</version>
         </dependency>
     </dependencies>
 </project>
