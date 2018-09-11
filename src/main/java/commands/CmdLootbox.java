@@ -187,7 +187,12 @@ public class CmdLootbox implements Command {
             }
 
         } else {
-            MessageMask.msg(tc, user, Color.RED, "You can only get one lootbox in 24 hours!");
+
+            Duration duration = Duration.between(userIDs.get(event.getAuthor().getId()), LocalDateTime.now());
+            long diff = Math.abs(duration.toMillis());
+            long diifH = diff / 3600000;
+
+            MessageMask.msg(tc, user, Color.RED, String.format("Wait %shoures to get your next lootbox!", diifH));
         }
 
         return false;
