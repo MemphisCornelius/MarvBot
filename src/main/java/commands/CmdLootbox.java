@@ -11,6 +11,8 @@ import util.Time;
 import java.awt.*;
 import java.io.*;
 import java.sql.*;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.time.*;
 import java.util.*;
 
@@ -187,12 +189,14 @@ public class CmdLootbox implements Command {
             }
 
         } else {
+            DecimalFormat df = new DecimalFormat("###.##");
 
             Duration duration = Duration.between(userIDs.get(event.getAuthor().getId()), LocalDateTime.now());
-            long diff = Math.abs(duration.toMillis());
-            long diifH = diff / 3600000;
+            double diff = Math.abs(duration.toMillis());
+            diff = 86400000/*ms = 1d*/ - diff;
+            double diffH = diff / 3600000;
 
-            MessageMask.msg(tc, user, Color.RED, String.format("Wait %shoures to get your next lootbox!", diifH));
+            MessageMask.msg(tc, user, Color.RED, String.format("Wait %s houres to get your next lootbox!", df.format(diffH)));
         }
 
         return false;

@@ -19,7 +19,7 @@ public class AutoroleHandler extends ListenerAdapter {
         Member member = event.getMember();
 
         List<String> roles = autoroles.get(g.getId());
-
+        if (roles != null && !roles.isEmpty())
         for (String r : roles) {
 
             g.getController().addSingleRoleToMember(member, g.getRoleById(r)).queue();
