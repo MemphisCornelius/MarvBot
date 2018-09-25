@@ -1,5 +1,7 @@
 package util;
 
+import core.ServerSettingsHandler;
+
 public class Config {
 
     private Config() {}
@@ -9,7 +11,7 @@ public class Config {
     public static final String DESINGER = "182223737884639232";
 
     //PREFIX
-    public static final String PREFIX = "-";
+    public static final String PREFIX = ServerSettingsHandler.getPrefix();
 
     //INVITELINK
     public static final  String INVITELINK = "https://discordapp.com/oauth2/authorize?client_id=388355915583324160&scope=bot&permissions=8";

@@ -153,7 +153,7 @@ public class CmdAutorole implements Command {
             }
         }else {
             MessageMask.msg(tc, user, Color.RED, "https://vignette.wikia.nocookie.net/timmypedia/images/1/1f/Red-X-in-circle.png/revision/latest?cb=20160924072833",
-                    "ERROR! \n\nInvalid arguments!\nUse `" + Config.PREFIX + Config.CMD_HELP + " " + Config.CMD_AUTOROLE + "` to get more information about it.");
+                    "ERROR! \n\nInvalid arguments!\nUse `" + Config.PREFIX + Config.CMD_HELP + " " + Config.CMD_AUTOROLE + "` to get more information about it. ");
         }
 
         return false;

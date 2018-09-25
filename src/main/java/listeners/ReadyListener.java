@@ -15,7 +15,7 @@ public class ReadyListener extends ListenerAdapter {
         String user = ServerSettingsHandler.getDBUS();
         String password = ServerSettingsHandler.getDBPW();
 
-        String sql = "CREATE CACHED TABLE IF NOT EXISTS lootboxes" +
+        String lootboxes = "CREATE CACHED TABLE IF NOT EXISTS lootboxes" +
                 "(uid VARCHAR(20) not NULL, " +
                 " n_c INTEGER, " +
                 " n_u INTEGER, " +
@@ -24,12 +24,18 @@ public class ReadyListener extends ListenerAdapter {
                 " n_l INTEGER, " +
                 " PRIMARY KEY (uid))";
 
+        String userTime = "CREATE CACHED TABLE IF NOT EXISTS usertime" +
+                "(uid VARCHAR(20) not NULL, " +
+                " datetime VARCHAR(23)," +
+                " PRIMARY KEY (uid))";
+
         try {
 
             Connection conn = DriverManager.getConnection(url, user, password);
             Statement stmt = conn.createStatement();
 
-            stmt.executeUpdate(sql);
+            stmt.executeUpdate(lootboxes);
+            stmt.executeUpdate(userTime);
 
             stmt.close();
             conn.close();
@@ -45,7 +51,6 @@ public class ReadyListener extends ListenerAdapter {
     public void onReady(ReadyEvent event) {
 
         commands.CmdAutochannel.load(event.getJDA());
-        commands.CmdLootbox.load();
         commands.CmdAutorole.load();
         core.DVCbGHandler.load();
         createDbTable();

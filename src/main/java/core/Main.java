@@ -58,7 +58,6 @@ public class Main {
     //COMMANDS
     private static void addCommands() {
         CommandHandler.commands.put(Config.CMD_PING, new CmdPing());
-        CommandHandler.commands.put(Config.CMD_LOOTBOX, new CmdLootbox());
         CommandHandler.commands.put(Config.CMD_COINFLIP, new CmdCoinflip());
         CommandHandler.commands.put(Config.CMD_POKE, new CmdPoke());
         CommandHandler.commands.put(Config.CMD_HELP, new CmdHelp());
@@ -72,5 +71,6 @@ public class Main {
         CommandHandler.commands.put(Config.CMD_GITHUBISSUE, new CmdGithubIssue());
         CommandHandler.commands.put(Config.CMD_AUTOROLE, new CmdAutorole());
         CommandHandler.commands.put(Config.CMD_INVENTORY, new CmdInventory());
+        CommandHandler.commands.put(Config.CMD_LOOTBOX, new CmdLootbox());
     }
 }

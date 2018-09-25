@@ -50,7 +50,7 @@ public class ServerSettingsHandler {
                 }
 
             }else {
-                System.err.println("Please check the spelling st the left side of line: " + (i + 1));
+                System.err.println("Please check the spelling at the left side of line: " + (i + 1));
             }
         }
     }
@@ -75,5 +75,8 @@ public class ServerSettingsHandler {
     }
     public static String getDBURL() {
         return settings.get("DB_URL");
+    }
+    public static String getPrefix() {
+        return settings.get("PREFIX");
     }
 }

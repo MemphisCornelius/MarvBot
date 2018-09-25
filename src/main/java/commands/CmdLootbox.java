@@ -8,59 +8,58 @@ import util.Config;
 import util.MessageMask;
 import util.Time;
 
-import java.awt.*;
-import java.io.*;
+import java.awt.Color;
 import java.sql.*;
 import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.time.*;
-import java.util.*;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Random;
 
 public class CmdLootbox implements Command {
 
+    private static String url = ServerSettingsHandler.getDBURL();
+    private static String usr = ServerSettingsHandler.getDBUS();
+    private static String password = ServerSettingsHandler.getDBPW();
+    private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH-mm-ss-SSS");
 
-    private static HashMap<String, LocalDateTime> userIDs = new HashMap<>();
+    private static void put(String uid, LocalDateTime dateTime) {
 
-    private static void save() {
+        String sql = "INSERT INTO usertime VALUES (?, ?)";
 
-        File path = new File("SERVER_SETTINGS/");
-        if (!path.exists()) {
-            path.mkdir();
-        }
+        try (Connection conn = DriverManager.getConnection(url, usr, password);
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-        HashMap<String, LocalDateTime> out = new HashMap<>();
+            String dateTimeS = dateTime.format(formatter);
+            System.out.println(dateTimeS);
 
-        userIDs.forEach((id, d) -> out.put(id, d));
+            stmt.setString(1, uid);
+            stmt.setString(2, dateTimeS);
+            stmt.executeUpdate();
 
-
-        try {
-            FileOutputStream fos = new FileOutputStream("SERVER_SETTINGS/userIDs_for_lootboxes_with_date.dat");
-            ObjectOutputStream oos = new ObjectOutputStream(fos);
-            oos.writeObject(out);
-            oos.close();
-        } catch (IOException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
-
     }
 
-    public static void load() {
+    private static void replace(String uid, LocalDateTime dateTime) {
 
-        File file = new File("SERVER_SETTINGS/userIDs_for_lootboxes_with_date.dat");
-        if (file.exists()) {
-            try {
-                FileInputStream fis = new FileInputStream(file);
-                ObjectInputStream ois = new ObjectInputStream(fis);
-                HashMap<String, LocalDateTime> out = (HashMap<String, LocalDateTime>) ois.readObject();
-                ois.close();
+        String sql = "UPDATE usertime SET datetime = ? WHERE uid = ?";
 
-                out.forEach((d, id) -> userIDs.put(d, id));
+        try (Connection conn = DriverManager.getConnection(url, usr, password);
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            } catch (IOException | ClassNotFoundException e) {
-                e.printStackTrace();
-            }
+            String dateTimeS = dateTime.format(formatter);
+
+            stmt.setString(1, dateTimeS);
+            stmt.setString(2, uid);
+            stmt.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
+
 
     private static boolean oneOrMoreDaysAfter(LocalDateTime d1, LocalDateTime d2) {
         Duration duration = Duration.between(d1, d2);
@@ -79,9 +78,9 @@ public class CmdLootbox implements Command {
         } else if (rn <= 85) {
             return "n_r";
         } else if (rn <= 95) {
-            return "n_l";
-        } else {
             return "n_e";
+        } else {
+            return "n_l";
         }
     }
 
@@ -130,82 +129,92 @@ public class CmdLootbox implements Command {
     public boolean action(String[] args, MessageReceivedEvent event) {
 
         int rn = new Random().nextInt(100) + 1;
-
-        String url = ServerSettingsHandler.getDBURL();
-        String usr = ServerSettingsHandler.getDBUS();
-        String password = ServerSettingsHandler.getDBPW();
-
         TextChannel tc = event.getTextChannel();
         User user = event.getAuthor();
+        boolean hasEntry = false;
+        LocalDateTime dateTime = null;
 
-        if (userIDs.containsKey(event.getAuthor().getId()) && oneOrMoreDaysAfter(userIDs.get(event.getAuthor().getId()), LocalDateTime.now()) || !userIDs.containsKey(event.getAuthor().getId())) {
+        String hasEntryQuery = "SELECT uid FROM usertime WHERE uid = ?";
+        String dateTimeQuery = "SELECT datetime FROM usertime WHERE uid = ?";
+        String lootboxNumberQuery = "SELECT ? FROM lootboxes WHERE uid = ?";
+        String insertQuery = "INSERT INTO lootboxes VALUES (?, 0, 0, 0, 0, 0)";
+        String updateQuery = "UPDATE lootboxes SET ? = ? WHERE uid = ?";
+
+        try (Connection conn = DriverManager.getConnection(url, usr, password);
+             PreparedStatement hasEntryStatment = conn.prepareStatement(hasEntryQuery);
+             PreparedStatement dateTimeStatment = conn.prepareStatement(dateTimeQuery)) {
+
+            hasEntryStatment.setString(1, user.getId());
+            ResultSet rs = hasEntryStatment.executeQuery();
+            hasEntry = rs.next();
+
+            if (hasEntry) {
+                dateTimeStatment.setString(1, user.getId());
+                ResultSet rs1 = dateTimeStatment.executeQuery();
+                rs1.next();
+                dateTime = LocalDateTime.parse(rs1.getString(1), formatter);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        if (!hasEntry || oneOrMoreDaysAfter(dateTime, LocalDateTime.now())) {
 
             MessageMask.msg(tc, user, getColorByLootbox(getLootboxCode(rn)), "You've obtained a " + getNameByLootbox(getLootboxCode(rn)) + " lootbox!");
 
             System.out.println("[LOOTBOX] " + Time.getTime() + event.getMessage().getAuthor() + " obtained a " + getNameByLootbox(getLootboxCode(rn)) + " lootbox");
 
-            if (userIDs.containsKey(event.getAuthor().getId())) {
-                userIDs.replace(event.getAuthor().getId(), userIDs.get(event.getAuthor().getId()), LocalDateTime.now());
+            if (hasEntry) {
+                replace(event.getAuthor().getId(), LocalDateTime.now());
             } else {
-                userIDs.put(event.getAuthor().getId(), LocalDateTime.now());
+                put(event.getAuthor().getId(), LocalDateTime.now());
             }
-            save();
 
-            try {
-                Connection conn = DriverManager.getConnection(url, usr, password);
-                Statement stmt = conn.createStatement();
+            try (Connection conn = DriverManager.getConnection(url, usr, password);
+                 PreparedStatement lootboxNumberStatment = conn.prepareStatement(lootboxNumberQuery);
+                 PreparedStatement insertStatment = conn.prepareStatement(insertQuery);
+                 PreparedStatement updateStatment = conn.prepareStatement(updateQuery)) {
 
-                String sql = String.format("SELECT %s FROM lootboxes WHERE uid=%s", getLootboxCode(rn), event.getAuthor().getId());
-                ResultSet rs = stmt.executeQuery(sql);
-                rs.next();
+                int n;
 
-                String test = rs.getString(1);
-                int n = Integer.valueOf(test);
+                lootboxNumberStatment.setString(1, getLootboxCode(rn));
+                lootboxNumberStatment.setString(2, user.getId());
+                ResultSet rs = lootboxNumberStatment.executeQuery();
 
+                if (!rs.next()) {
+                    insertStatment.setString(1, user.getId());
+                    insertStatment.executeUpdate();
+                    n = 0;
+                }else {
+                    n = Integer.valueOf(rs.getString(1));
+                }
 
-                sql = String.format("UPDATE lootboxes SET %s=%s WHERE uid=%s", getLootboxCode(rn), n + 1, event.getAuthor().getId());
-                stmt.executeUpdate(sql);
-
-                stmt.close();
-                conn.close();
+                updateStatment.setString(1, getLootboxCode(rn));
+                updateStatment.setString(2, String.valueOf(n + 1));
+                updateStatment.setString(3, user.getId());
+                updateStatment.executeUpdate();
 
             } catch (SQLException e) {
-                try {
-                    Connection conn = DriverManager.getConnection(url, usr, password);
-                    Statement stmt = conn.createStatement();
-
-                    String sql = String.format("INSERT INTO lootboxes VALUES (%s, 0, 0, 0, 0, 0)", event.getAuthor().getId());
-                    stmt.executeUpdate(sql);
-
-                    sql = String.format("UPDATE lootboxes SET %s=%s WHERE uid=%s", getLootboxCode(rn), 1, event.getAuthor().getId());
-                    stmt.executeUpdate(sql);
-
-                    stmt.close();
-                    conn.close();
-
-                } catch (SQLException ex) {
-                    System.out.println(String.format("[%s] %s", ex.getErrorCode(), ex.getMessage()));
-                }
+                    System.out.println(String.format("[%s] %s", e.getErrorCode(), e.getMessage()));
             }
 
         } else {
-            DecimalFormat df = new DecimalFormat("###.##");
 
-            Duration duration = Duration.between(userIDs.get(event.getAuthor().getId()), LocalDateTime.now());
+            DecimalFormat df = new DecimalFormat("###.##");
+            Duration duration = Duration.between(dateTime, LocalDateTime.now());
             double diff = Math.abs(duration.toMillis());
             diff = 86400000/*ms = 1d*/ - diff;
             double diffH = diff / 3600000;
 
             MessageMask.msg(tc, user, Color.RED, String.format("Wait %s houres to get your next lootbox!", df.format(diffH)));
         }
-
         return false;
     }
 
     @Override
     public void executed(boolean success, MessageReceivedEvent event) {
         System.out.println("[COMMAND] " + Time.getTime() + Config.CMD_LOOTBOX.toUpperCase() + " was executed by " + event.getMessage().getAuthor());
-
     }
 
     @Override
