@@ -5,22 +5,14 @@ import listeners.*;
 import net.dv8tion.jda.core.*;
 import net.dv8tion.jda.core.entities.Game;
 import org.kohsuke.github.GHRepository;
-import org.kohsuke.github.GitHub;
 import util.Config;
 
 import javax.security.auth.login.LoginException;
-import java.io.IOException;
 
 
 public class Main {
 
     private static JDABuilder builder;
-    private static GitHub gitHub;
-    private static GHRepository repo;
-
-    public static GHRepository getRepo() {
-        return repo;
-    }
 
     public static void main(String[] args) {
 
@@ -38,9 +30,7 @@ public class Main {
 
         try {
             builder.build().awaitReady();
-            gitHub = GitHub.connectUsingPassword(ServerSettingsHandler.getGHLogin(), ServerSettingsHandler.getGHPW());
-            repo = gitHub.getRepository("MemphisCornelius/MarvBot");
-        } catch (LoginException | IOException | InterruptedException e) {
+        } catch (LoginException | InterruptedException e) {
             e.printStackTrace();
         }
     }
@@ -64,7 +54,6 @@ public class Main {
         CommandHandler.commands.put(Config.CMD_AUTOCHAN, new CmdAutochannel());
       //CommandHandler.commands.put(Config.CMD_ZNAKE, new CmdZnake());
         CommandHandler.commands.put(Config.CMD_ABOUT, new CmdAbout());
-      //CommandHandler.commands.put(Config.CMD_BUGREPORT, new CmdBugreport());
         CommandHandler.commands.put(Config.CMD_DEBUG, new CmdDebug());
         CommandHandler.commands.put(Config.CMD_SHUTDOWN, new CmdShutdown());
         CommandHandler.commands.put(Config.CMD_VERSION, new CmdVersion());
@@ -72,5 +61,7 @@ public class Main {
         CommandHandler.commands.put(Config.CMD_AUTOROLE, new CmdAutorole());
         CommandHandler.commands.put(Config.CMD_INVENTORY, new CmdInventory());
         CommandHandler.commands.put(Config.CMD_LOOTBOX, new CmdLootbox());
+        CommandHandler.commands.put(Config.CMD_initializeDVCbG, new CmdinitializeDVCbG());
     }
+
 }

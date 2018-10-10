@@ -31,7 +31,6 @@ public class CmdLootbox implements Command {
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             String dateTimeS = dateTime.format(formatter);
-            System.out.println(dateTimeS);
 
             stmt.setString(1, uid);
             stmt.setString(2, dateTimeS);
@@ -136,9 +135,9 @@ public class CmdLootbox implements Command {
 
         String hasEntryQuery = "SELECT uid FROM usertime WHERE uid = ?";
         String dateTimeQuery = "SELECT datetime FROM usertime WHERE uid = ?";
-        String lootboxNumberQuery = "SELECT ? FROM lootboxes WHERE uid = ?";
+        String lootboxNumberQuery = "SELECT " + getLootboxCode(rn) + " FROM lootboxes WHERE uid = ?";
         String insertQuery = "INSERT INTO lootboxes VALUES (?, 0, 0, 0, 0, 0)";
-        String updateQuery = "UPDATE lootboxes SET ? = ? WHERE uid = ?";
+        String updateQuery = "UPDATE lootboxes SET " + getLootboxCode(rn) + " = ? WHERE uid = ?";
 
         try (Connection conn = DriverManager.getConnection(url, usr, password);
              PreparedStatement hasEntryStatment = conn.prepareStatement(hasEntryQuery);
@@ -178,11 +177,12 @@ public class CmdLootbox implements Command {
 
                 int n;
 
-                lootboxNumberStatment.setString(1, getLootboxCode(rn));
-                lootboxNumberStatment.setString(2, user.getId());
+                lootboxNumberStatment.setString(1, user.getId());
                 ResultSet rs = lootboxNumberStatment.executeQuery();
 
-                if (!rs.next()) {
+                boolean boo = rs.next();
+
+                if (!boo) {
                     insertStatment.setString(1, user.getId());
                     insertStatment.executeUpdate();
                     n = 0;
@@ -190,19 +190,20 @@ public class CmdLootbox implements Command {
                     n = Integer.valueOf(rs.getString(1));
                 }
 
-                updateStatment.setString(1, getLootboxCode(rn));
-                updateStatment.setString(2, String.valueOf(n + 1));
-                updateStatment.setString(3, user.getId());
+                updateStatment.setString(1, String.valueOf(n + 1));
+                updateStatment.setString(2, user.getId());
                 updateStatment.executeUpdate();
 
             } catch (SQLException e) {
                     System.out.println(String.format("[%s] %s", e.getErrorCode(), e.getMessage()));
+                    e.printStackTrace();
             }
 
         } else {
 
             DecimalFormat df = new DecimalFormat("###.##");
             Duration duration = Duration.between(dateTime, LocalDateTime.now());
+
             double diff = Math.abs(duration.toMillis());
             diff = 86400000/*ms = 1d*/ - diff;
             double diffH = diff / 3600000;

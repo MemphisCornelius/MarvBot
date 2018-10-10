@@ -1,11 +1,11 @@
 package commands;
 
-import core.Main;
 import net.dv8tion.jda.core.JDAInfo;
 import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.entities.User;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import util.Config;
+import util.GitHubConnector;
 import util.MessageMask;
 import util.Time;
 
@@ -39,9 +39,6 @@ public class CmdVersion implements Command {
                     case "java":
                         MessageMask.help(tc, user, String.format("JAVA: %s", System.getProperty("java.version")));
                         break;
-                    case "bot":
-                    case "BOT":
-                        MessageMask.help(tc, user, String.format("BOT: %s", Main.getRepo().getLatestRelease().getName()));
                 }
                 break;
             default:

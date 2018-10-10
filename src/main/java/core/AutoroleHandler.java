@@ -1,16 +1,14 @@
 package core;
 
+import commands.CmdAutorole;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
-import java.util.HashMap;
 import java.util.List;
 
 public class AutoroleHandler extends ListenerAdapter {
-
-    HashMap<String, List<String>> autoroles = commands.CmdAutorole.getAutorole();
 
     @Override
     public void onGuildMemberJoin(GuildMemberJoinEvent event) {
@@ -18,7 +16,7 @@ public class AutoroleHandler extends ListenerAdapter {
         Guild g = event.getGuild();
         Member member = event.getMember();
 
-        List<String> roles = autoroles.get(g.getId());
+        List<String> roles = CmdAutorole.getAutoroles(g.getId());
         if (roles != null && !roles.isEmpty())
         for (String r : roles) {
 

@@ -58,13 +58,13 @@ public class ServerSettingsHandler {
     static String getToken() {
         return settings.get("DISCORD_TOKEN");
     }
-    static String getGHLogin() {
+    public static String getGHLogin() {
         return settings.get("GITHUB_LOGIN");
     }
-    static String getGHOA() {
+    public static String getGHOA() {
         return  settings.get("GITHUB_OA");
     }
-    static String getGHPW() {
+    public static String getGHPW() {
         return settings.get("GITHUB_PW");
     }
     public static String getDBUS() {

@@ -15,7 +15,7 @@ public class ReadyListener extends ListenerAdapter {
         String user = ServerSettingsHandler.getDBUS();
         String password = ServerSettingsHandler.getDBPW();
 
-        String lootboxes = "CREATE CACHED TABLE IF NOT EXISTS lootboxes" +
+        String lootboxesTable = "CREATE CACHED TABLE IF NOT EXISTS lootboxes" +
                 "(uid VARCHAR(20) not NULL, " +
                 " n_c INTEGER, " +
                 " n_u INTEGER, " +
@@ -24,18 +24,30 @@ public class ReadyListener extends ListenerAdapter {
                 " n_l INTEGER, " +
                 " PRIMARY KEY (uid))";
 
-        String userTime = "CREATE CACHED TABLE IF NOT EXISTS usertime" +
+        String userTimeTable = "CREATE CACHED TABLE IF NOT EXISTS usertime" +
                 "(uid VARCHAR(20) not NULL, " +
                 " datetime VARCHAR(23)," +
                 " PRIMARY KEY (uid))";
+
+        String autoRolesTable = "CREATE CACHED TABLE IF NOT EXISTS autoroles" +
+                "(rid VARCHAR(18) not NULL, " +
+                " gid VARCHAR(18), " +
+                " PRIMARY KEY (rid))";
+
+        String vcNameTable = "CREATE CACHED TABLE IF NOT EXISTS vcnames" +
+                "(vcid VARCHAR(18) not NULL, " +
+                " vcname VARCHAR(100), " +
+                " PRIMARY KEY (vcid))";
 
         try {
 
             Connection conn = DriverManager.getConnection(url, user, password);
             Statement stmt = conn.createStatement();
 
-            stmt.executeUpdate(lootboxes);
-            stmt.executeUpdate(userTime);
+            stmt.executeUpdate(lootboxesTable);
+            stmt.executeUpdate(userTimeTable);
+            stmt.executeUpdate(autoRolesTable);
+            stmt.executeUpdate(vcNameTable);
 
             stmt.close();
             conn.close();
@@ -51,8 +63,6 @@ public class ReadyListener extends ListenerAdapter {
     public void onReady(ReadyEvent event) {
 
         commands.CmdAutochannel.load(event.getJDA());
-        commands.CmdAutorole.load();
-        core.DVCbGHandler.load();
         createDbTable();
 
         System.out.println("[INFO] " + Time.getTime() + " The bot is ready!");

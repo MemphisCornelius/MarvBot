@@ -1,16 +1,17 @@
 package commands;
 
-import core.Main;
 import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.entities.User;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.kohsuke.github.GHIssue;
 import org.kohsuke.github.GHIssueBuilder;
 import util.Config;
+import util.GitHubConnector;
 import util.MessageMask;
 import util.Time;
 
 import java.awt.Color;
+import java.io.IOException;
 
 public class CmdGithubIssue implements Command {
 
@@ -50,17 +51,17 @@ public class CmdGithubIssue implements Command {
                 content = content.replaceFirst(args[0], "");
 
                 try {
-                    GHIssueBuilder issueBuilder = Main.getRepo().createIssue("Issue reported by" + event.getAuthor());
+                    GHIssueBuilder issueBuilder = GitHubConnector.getRepo().createIssue("Issue reported by" + event.getAuthor());
                     GHIssue issue = issueBuilder.
                             label(getLabelByNumber(args[0])).
                             body(content).
                             create();
 
-                    String issueUrl = issue.getUrl().toString();
+                    String issueUrl = issue.getHtmlUrl().toString();
 
                     MessageMask.msg(tc, user, Color.green, "Done!\n\nYou cann follow your ticket here: " + issueUrl);
 
-                } catch (Exception e) {
+                } catch (IOException | NullPointerException e) {
                     e.printStackTrace();
                 }
 

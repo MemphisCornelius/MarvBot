@@ -17,50 +17,83 @@ import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import net.dv8tion.jda.core.requests.restaction.pagination.AuditLogPaginationAction;
 
 import java.io.*;
+import java.sql.*;
 import java.util.*;
 
 public class DVCbGHandler extends ListenerAdapter {
 
-    private static HashMap<String, String> vcNames = new HashMap<>();
-
-    private static void save() {
-
-        File path = new File("SERVER_SETTINGS/");
-        if (!path.exists())
-            path.mkdir();
-
-        HashMap<String, String> out = new HashMap<>();
+    private static String url = ServerSettingsHandler.getDBURL();
+    private static String usr = ServerSettingsHandler.getDBUS();
+    private static String pw = ServerSettingsHandler.getDBPW();
 
 
-        vcNames.forEach((vcID, vcName) -> out.put(vcID, vcName));
+    private static void put(String vcid, String vcname) {
 
-        try {
-            FileOutputStream fos = new FileOutputStream("SERVER_SETTINGS/vcNames.dat");
-            ObjectOutputStream oos = new ObjectOutputStream(fos);
-            oos.writeObject(out);
-            oos.close();
-        } catch (IOException e) {
+        String sql = "INSERT INTO vcnames VALUES (?, ?)";
+
+        try (Connection conn = DriverManager.getConnection(url, usr, pw);
+             PreparedStatement pst = conn.prepareStatement(sql)) {
+
+            pst.setString(1, vcid);
+            pst.setString(2, vcname);
+            pst.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void remove(String vcid) {
+
+        String sql = "DELETE FROM vcnames WHERE vcid = ?";
+
+        try (Connection conn = DriverManager.getConnection(url, usr, pw);
+             PreparedStatement pst = conn.prepareStatement(sql)) {
+
+            pst.setString(1, vcid);
+            pst.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void replace(String vcid, String newValue) {
+
+        String sql = "UPDATE vcnames SET vcname = ? WHERE vcid = ?";
+
+        try (Connection conn = DriverManager.getConnection(url, usr, pw);
+             PreparedStatement pst = conn.prepareStatement(sql)) {
+
+            pst.setString(1, newValue);
+            pst.setString(2, vcid);
+            pst.executeUpdate();
+
+        } catch (SQLException e) {
             e.printStackTrace();
         }
 
     }
 
-    public static void load() {
-        File file = new File("SERVER_SETTINGS/vcNames.dat");
-        if (file.exists()) {
-            try {
-                FileInputStream fis = new FileInputStream(file);
-                ObjectInputStream ois = new ObjectInputStream(fis);
-                HashMap<String, String> out = (HashMap<String, String>) ois.readObject();
-                ois.close();
+    private static String getName(String vcid) {
 
-                out.forEach((vcID, vcName) -> vcNames.put(vcID, vcName));
+        String sql = "SELECT vcname FROM vcnames WHERE vcid = ?";
 
-            } catch (IOException | ClassNotFoundException e) {
-                e.printStackTrace();
-            }
+        try (Connection conn = DriverManager.getConnection(url, usr, pw);
+             PreparedStatement pst = conn.prepareStatement(sql)) {
+
+            pst.setString(1, vcid);
+            ResultSet rs = pst.executeQuery();
+            rs.next();
+
+            return rs.getString(1);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
+        return "";
     }
+
 
     private static List<Object> getKeysFromValue(Map<?, ?> hm, Object value) {
         List<Object> list = new ArrayList<>();
@@ -82,7 +115,7 @@ public class DVCbGHandler extends ListenerAdapter {
         if (members.size() == 1) {
             try {
                 return vc.getMembers().get(0).getGame().getName();
-            }catch (NullPointerException e) {
+            } catch (NullPointerException e) {
                 return "";
             }
 
@@ -115,14 +148,14 @@ public class DVCbGHandler extends ListenerAdapter {
         }
 
         if (i > (members.size() / 2) && getKeysFromValue(games, i).size() == 1) {
-                return getKeysFromValue(games, i).get(0).toString();
+            return getKeysFromValue(games, i).get(0).toString();
         }
 
         return "";
     }
 
     private static void setNameToGame(VoiceChannel vc) {
-        if ((vc.getGuild().getAfkChannel() == null || !vc.getId().equals(vc.getGuild().getAfkChannel().getId())) && !getMostGame(vc).isEmpty()) {
+        if (!getMostGame(vc).isEmpty() && (vc.getGuild().getAfkChannel() == null || !vc.getId().equals(vc.getGuild().getAfkChannel().getId()))) {
             vc.getManager().setName(getMostGame(vc)).queue();
         } else {
             setNameToDefault(vc);
@@ -130,28 +163,25 @@ public class DVCbGHandler extends ListenerAdapter {
     }
 
     private static void setNameToDefault(VoiceChannel vc) {
-        vc.getManager().setName(vcNames.get(vc.getId())).queue();
+        vc.getManager().setName(getName(vc.getId())).queue();
     }
 
     @Override
     public void onGuildJoin(GuildJoinEvent event) {
 
         for (VoiceChannel vc : event.getGuild().getVoiceChannels()) {
-            vcNames.put(vc.getId(), vc.getName());
+            put(vc.getId(), vc.getName());
         }
-        save();
     }
 
     @Override
     public void onVoiceChannelCreate(VoiceChannelCreateEvent event) {
-        vcNames.put(event.getChannel().getId(), event.getChannel().getName());
-        save();
+        put(event.getChannel().getId(), event.getChannel().getName());
     }
 
     @Override
     public void onVoiceChannelDelete(VoiceChannelDeleteEvent event) {
-        vcNames.remove(event.getChannel().getId(), event.getChannel().getName());
-        save();
+        remove(event.getChannel().getId());
     }
 
     @Override
@@ -164,8 +194,7 @@ public class DVCbGHandler extends ListenerAdapter {
             if (entries.isEmpty()) return;
             AuditLogEntry entry = entries.get(0);
             if (!entry.getUser().getId().equals(event.getJDA().getSelfUser().getId())) {
-                vcNames.replace(event.getChannel().getId(), event.getOldValue(), event.getNewValue());
-                save();
+                replace(event.getChannel().getId(), event.getNewValue());
             }
         });
     }
@@ -173,9 +202,8 @@ public class DVCbGHandler extends ListenerAdapter {
     @Override
     public void onGuildLeave(GuildLeaveEvent event) {
         for (VoiceChannel vc : event.getGuild().getVoiceChannels()) {
-            vcNames.remove(vc.getId(), vc.getName());
+            remove(vc.getId());
         }
-        save();
     }
 
     @Override
@@ -208,4 +236,5 @@ public class DVCbGHandler extends ListenerAdapter {
             setNameToDefault(event.getChannelLeft());
         }
     }
+
 }
