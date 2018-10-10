@@ -49,7 +49,20 @@ public class CmdInventory implements Command {
     @Override
     public boolean action(String[] args, MessageReceivedEvent event) throws ParseException, IOException {
 
-        int n[] = getNumbers(event.getAuthor());
+        User user;
+
+        if (args.length > 0) {
+
+            try {
+                user = event.getMessage().getMentionedMembers().get(0).getUser();
+            }catch (IndexOutOfBoundsException e) {
+                user = event.getMember().getUser();
+            }
+        }else {
+            user = event.getMember().getUser();
+        }
+
+        int n[] = getNumbers(user);
 
         if (n != null) {
 
@@ -66,11 +79,11 @@ public class CmdInventory implements Command {
             if (n[4] > 0)
                 msg = msg + "\nlegendary lootbox(es): " + n[4];
 
-            MessageMask.msg(event.getTextChannel(), event.getAuthor(), Color.GREEN, "**INVENTORY**" +
+            MessageMask.msg(event.getTextChannel(), user, Color.GREEN, "**INVENTORY**" +
                     "\n\n" + msg);
 
         }else
-            MessageMask.msg(event.getTextChannel(), event.getAuthor(), Color.GREEN, "**INVENTORY**" +
+            MessageMask.msg(event.getTextChannel(), user, Color.GREEN, "**INVENTORY**" +
                     "\n\nYou have no items in your inventory");
 
         return false;
