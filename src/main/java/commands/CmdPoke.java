@@ -72,7 +72,7 @@ public class CmdPoke implements Command {
 
         } else {
 
-            MessageMask.msg(tc, user, Color.RED,"https://vignette.wikia.nocookie.net/timmypedia/images/1/1f/Red-X-in-circle.png/revision/latest?cb=20160924072833", "Invalid arguments!\n\n\n" +
+            MessageMask.msg(tc, user, Color.RED,Config.ERROR_THUMBNAIL, "Invalid arguments!\n\n\n" +
                     String.format("Usage:\n\n\\%s %s <User> <Message>\n", Config.PREFIX, Config.CMD_POKE));
 
         }

@@ -1,5 +1,6 @@
 package core;
 
+import commands.CmdDVCbGIgnore;
 import net.dv8tion.jda.core.audit.ActionType;
 import net.dv8tion.jda.core.audit.AuditLogEntry;
 import net.dv8tion.jda.core.entities.Member;
@@ -155,7 +156,10 @@ public class DVCbGHandler extends ListenerAdapter {
     }
 
     private static void setNameToGame(VoiceChannel vc) {
-        if (!getMostGame(vc).isEmpty() && (vc.getGuild().getAfkChannel() == null || !vc.getId().equals(vc.getGuild().getAfkChannel().getId()))) {
+
+        if (!getMostGame(vc).isEmpty() //checks if there is a most played game
+                && !CmdDVCbGIgnore.getDVCbGIgnore().contains(vc.getId()) //checks if this vc is is not ignored
+                && (vc.getGuild().getAfkChannel() == null || !vc.getId().equals(vc.getGuild().getAfkChannel().getId()))) /*checks if vc is not a afk-vc*/ {
             vc.getManager().setName(getMostGame(vc)).queue();
         } else {
             setNameToDefault(vc);

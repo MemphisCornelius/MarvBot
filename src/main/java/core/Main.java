@@ -4,7 +4,6 @@ import commands.*;
 import listeners.*;
 import net.dv8tion.jda.core.*;
 import net.dv8tion.jda.core.entities.Game;
-import org.kohsuke.github.GHRepository;
 import util.Config;
 
 import javax.security.auth.login.LoginException;
@@ -40,9 +39,10 @@ public class Main {
         builder.addEventListener(new ReadyListener());
         builder.addEventListener(new LogListener());
         builder.addEventListener(new MessageListener());
-        builder.addEventListener(new AutochannelHandler());
         builder.addEventListener(new AutoroleHandler());
         builder.addEventListener(new DVCbGHandler());
+        builder.addEventListener(new AutochannelHandler());
+        builder.addEventListener(new ReactionMoveListener());
     }
 
     //COMMANDS
@@ -61,7 +61,7 @@ public class Main {
         CommandHandler.commands.put(Config.CMD_AUTOROLE, new CmdAutorole());
         CommandHandler.commands.put(Config.CMD_INVENTORY, new CmdInventory());
         CommandHandler.commands.put(Config.CMD_LOOTBOX, new CmdLootbox());
-        CommandHandler.commands.put(Config.CMD_initializeDVCbG, new CmdinitializeDVCbG());
+        CommandHandler.commands.put(Config.CMD_initializeDVCbG, new CmdDVCbGInitialize());
+        CommandHandler.commands.put(Config.CMD_DVCBGIGNORE, new CmdDVCbGIgnore());
     }
-
 }

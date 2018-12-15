@@ -2,6 +2,8 @@ package util;
 
 import core.ServerSettingsHandler;
 
+import java.time.format.DateTimeFormatter;
+
 public class Config {
 
     private Config() {}
@@ -14,13 +16,13 @@ public class Config {
     public static final String PREFIX = ServerSettingsHandler.getPrefix();
 
     //INVITELINK
-    public static final  String INVITELINK = "https://discordapp.com/oauth2/authorize?client_id=388355915583324160&scope=bot&permissions=8";
+    public static final  String INVITELINK = ServerSettingsHandler.getInvitelink();
 
     //GAME
-    public static final String GAME = "-help";
+    public static final String GAME = ServerSettingsHandler.getGame();
 
     //LOG LISTENER CHANNEL
-    public static final String CHANNEL_LOG_LISTENER = "log";
+    public static final String CHANNEL_LOG_LISTENER = ServerSettingsHandler.getLogChannelName();
 
     //COMMANDS
     public static final String CMD_PING = "ping";
@@ -39,6 +41,11 @@ public class Config {
     public static final String CMD_GITHUBISSUE = "ghticket";
     public static final String CMD_AUTOROLE = "autorole";
     public static final String CMD_INVENTORY = "inventory";
-    public static final String CMD_initializeDVCbG = "initializeDVCbG";
+    public static final String CMD_initializeDVCbG = "dvcbg_initialize";
+    public static final String CMD_DVCBGIGNORE = "dvcbg_ignore";
+
+    //UTILS
+    public static final String ERROR_THUMBNAIL = "https://vignette.wikia.nocookie.net/timmypedia/images/1/1f/Red-X-in-circle.png/revision/latest?cb=20160924072833";
+    public static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH-mm-ss-SSS");
 
 }

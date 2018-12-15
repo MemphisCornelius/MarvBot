@@ -13,6 +13,8 @@ import java.util.TreeMap;
 
 public class CmdHelp implements Command {
 
+
+
     @Override
     public boolean called(String[] args, MessageReceivedEvent event) {
         return false;
@@ -65,6 +67,19 @@ public class CmdHelp implements Command {
                 case Config.CMD_DEBUG:
                     MessageMask.help(tc, user,"Get special information.");
                     break;
+
+                case Config.CMD_DVCBGIGNORE:
+                    MessageMask.help(tc, user,String.format("Add/remove voicechannels ignored by DVCbG\n\n" +
+                                    "**USAGE:**\n" +
+                                    ":white_small_square:  `%s%s set <Chan ID>`  -  Set DVCbG-ignore channel\n" +
+                                    ":white_small_square:  `%s%s unset <Chan ID>`  -  Unset DVCbG-ignore channel\n" +
+                                    ":white_small_square:  `%s%s list`  -  Display all DVCbG-ignore channels\n",
+                            Config.PREFIX, Config.CMD_DVCBGIGNORE, Config.PREFIX, Config.CMD_DVCBGIGNORE, Config.PREFIX, Config.CMD_DVCBGIGNORE));
+                    break;
+
+                case Config.CMD_initializeDVCbG:
+                    MessageMask.help(tc, user, String.format("Initialize voicechannels for DVCbG\n" +
+                            "Owner only!"));
 
                 case Config.CMD_GITHUBISSUE:
                     MessageMask.help(tc, user, String.format("Create a GitHub ticket.\n\n" +
@@ -123,9 +138,10 @@ public class CmdHelp implements Command {
         } else {
 
             StringBuilder COMMANDS = new StringBuilder();
+            Map<String, Command> commandsSorted = new TreeMap<>(CommandHandler.commands);
 
-            for (String key : CommandSortener.commandsSorted.keySet()) {
-                COMMANDS = COMMANDS.append(":white_small_square:").append(key).append("\n");
+            for (String key : commandsSorted.keySet()) {
+                COMMANDS.append(":white_small_square:").append(key).append("\n");
             }
 
             MessageMask.help(tc, user,
@@ -147,8 +163,4 @@ public class CmdHelp implements Command {
 
 }
 
-class CommandSortener {
 
-    static Map<String, Command> commandsSorted = new TreeMap<>(CommandHandler.commands);
-
-}

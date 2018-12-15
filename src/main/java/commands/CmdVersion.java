@@ -42,7 +42,7 @@ public class CmdVersion implements Command {
                 }
                 break;
             default:
-                MessageMask.msg(tc, user, Color.RED, "https://vignette.wikia.nocookie.net/timmypedia/images/1/1f/Red-X-in-circle.png/revision/latest?cb=20160924072833",
+                MessageMask.msg(tc, user, Color.RED, Config.ERROR_THUMBNAIL,
                         String.format("Invalid arguments!\n" + "**Usage**\n" + ":white_small_square: `%s%s` <[jda/JDA] / [java/JAVA]>", Config.PREFIX, Config.CMD_VERSION));
         }
         return false;

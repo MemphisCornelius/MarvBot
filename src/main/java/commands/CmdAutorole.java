@@ -134,7 +134,7 @@ public class CmdAutorole implements Command {
         String rid;
 
         if (!member.hasPermission(Permission.ADMINISTRATOR)) {
-            MessageMask.msg(tc, user, Color.RED, "https://vignette.wikia.nocookie.net/timmypedia/images/1/1f/Red-X-in-circle.png/revision/latest?cb=20160924072833",
+            MessageMask.msg(tc, user, Color.RED, Config.ERROR_THUMBNAIL,
                     "ERROR!\n\n You do not have the permisson to do that!");
         }else {
 
@@ -149,11 +149,11 @@ public class CmdAutorole implements Command {
                                 MessageMask.msg(tc, user, Color.GREEN, ":white_check_mark: Successfully set role as autorole.");
                                 add(rid, g);
                             } else {
-                                MessageMask.msg(tc, user, Color.RED, "https://vignette.wikia.nocookie.net/timmypedia/images/1/1f/Red-X-in-circle.png/revision/latest?cb=20160924072833",
+                                MessageMask.msg(tc, user, Color.RED, Config.ERROR_THUMBNAIL,
                                         "ERROR!\n\n This role is already a autorole!");
                             }
                         } catch (IndexOutOfBoundsException e) {
-                            MessageMask.msg(tc, user, Color.RED, "https://vignette.wikia.nocookie.net/timmypedia/images/1/1f/Red-X-in-circle.png/revision/latest?cb=20160924072833",
+                            MessageMask.msg(tc, user, Color.RED, Config.ERROR_THUMBNAIL,
                                     "ERROR!\n\nYou have to name the role you want to add!");
                         }
                         break;
@@ -168,15 +168,15 @@ public class CmdAutorole implements Command {
                                     MessageMask.msg(tc, user, Color.GREEN, ":white_check_mark: Successfully unset role as autorole. ");
                                     remove(rid);
                                 } else {
-                                    MessageMask.msg(tc, user, Color.RED, "https://vignette.wikia.nocookie.net/timmypedia/images/1/1f/Red-X-in-circle.png/revision/latest?cb=20160924072833",
+                                    MessageMask.msg(tc, user, Color.RED, Config.ERROR_THUMBNAIL,
                                             "ERROR!\n\nThis role isn`t a autorole!");
                                 }
                             } catch (IndexOutOfBoundsException e) {
-                                MessageMask.msg(tc, user, Color.RED, "https://vignette.wikia.nocookie.net/timmypedia/images/1/1f/Red-X-in-circle.png/revision/latest?cb=20160924072833",
+                                MessageMask.msg(tc, user, Color.RED, Config.ERROR_THUMBNAIL,
                                         "ERROR!\n\nYou have to name the role you want to remove!");
                             }
                         } else {
-                            MessageMask.msg(tc, user, Color.RED, "https://vignette.wikia.nocookie.net/timmypedia/images/1/1f/Red-X-in-circle.png/revision/latest?cb=20160924072833",
+                            MessageMask.msg(tc, user, Color.RED, Config.ERROR_THUMBNAIL,
                                     "ERROR!\n\nThere is no role you can remove!");
                         }
 
@@ -212,12 +212,12 @@ public class CmdAutorole implements Command {
                         break;
 
                     default:
-                        MessageMask.msg(tc, user, Color.RED, "https://vignette.wikia.nocookie.net/timmypedia/images/1/1f/Red-X-in-circle.png/revision/latest?cb=20160924072833",
+                        MessageMask.msg(tc, user, Color.RED, Config.ERROR_THUMBNAIL,
                                 "ERROR!\n\nYou have to use one of these keywords: set, add, uset, remove, delete, show list!\n\nFor more information use " +
                                         Config.PREFIX + Config.CMD_HELP + " " + Config.CMD_AUTOROLE);
                 }
             } else {
-                MessageMask.msg(tc, user, Color.RED, "https://vignette.wikia.nocookie.net/timmypedia/images/1/1f/Red-X-in-circle.png/revision/latest?cb=20160924072833",
+                MessageMask.msg(tc, user, Color.RED, Config.ERROR_THUMBNAIL,
                         "ERROR! \n\nInvalid arguments!\nUse `" + Config.PREFIX + Config.CMD_HELP + " " + Config.CMD_AUTOROLE + "` to get more information about it. ");
             }
         }

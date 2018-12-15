@@ -67,12 +67,12 @@ public class CmdGithubIssue implements Command {
 
 
             } else {
-                MessageMask.msg(tc, user, Color.RED, "https://vignette.wikia.nocookie.net/timmypedia/images/1/1f/Red-X-in-circle.png/revision/latest?cb=20160924072833",
+                MessageMask.msg(tc, user, Color.RED, Config.ERROR_THUMBNAIL,
                         "Invalid argument! Please enter a valid label number! \n\nLabel numbers:\n1: bug, 2: duplicate, 3: enhancement, " +
                                 "4: help wanted, 5: invalid, 6: question");
             }
         } else {
-            MessageMask.msg(tc, user, Color.RED, "https://vignette.wikia.nocookie.net/timmypedia/images/1/1f/Red-X-in-circle.png/revision/latest?cb=20160924072833",
+            MessageMask.msg(tc, user, Color.RED, Config.ERROR_THUMBNAIL,
                     String.format("Invalid arguments!\nPlease enter this command like this:\n`%s%s` <Label number> <Ticket description>\n\nLabel numbers:\n1: bug, 2: duplicate, 3: enhancement, " +
                             "4: help wanted, 5: invalid, 6: question", Config.PREFIX, Config.CMD_GITHUBISSUE));
         }

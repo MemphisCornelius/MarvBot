@@ -2,6 +2,7 @@ package core;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
@@ -17,6 +18,7 @@ public class ServerSettingsHandler {
         ArrayList<String> lines = new ArrayList<>();
 
         try {
+
             FileReader fr = new FileReader("SERVER_SETTINGS/SETTINGS.txt");
             Scanner sc = new Scanner(fr);
 
@@ -24,8 +26,6 @@ public class ServerSettingsHandler {
                 String line = sc.nextLine();
                 lines.add(line);
             }
-
-
 
         } catch (FileNotFoundException e) {
             System.err.println("Please add a file 'SETTINGS.txt' in 'SERVER_SETTINGS'!");
@@ -55,28 +55,15 @@ public class ServerSettingsHandler {
         }
     }
 
-    static String getToken() {
-        return settings.get("DISCORD_TOKEN");
-    }
-    public static String getGHLogin() {
-        return settings.get("GITHUB_LOGIN");
-    }
-    public static String getGHOA() {
-        return  settings.get("GITHUB_OA");
-    }
-    public static String getGHPW() {
-        return settings.get("GITHUB_PW");
-    }
-    public static String getDBUS() {
-        return settings.get("DB_USER");
-    }
-    public static String getDBPW() {
-        return settings.get("DB_PASSWORD");
-    }
-    public static String getDBURL() {
-        return settings.get("DB_URL");
-    }
-    public static String getPrefix() {
-        return settings.get("PREFIX");
-    }
+    static String getToken() { return settings.get("DISCORD_TOKEN"); }
+    public static String getGHLogin() { return settings.get("GITHUB_LOGIN"); }
+    public static String getGHOA() { return  settings.get("GITHUB_OA"); }
+    public static String getGHPW() { return settings.get("GITHUB_PW"); }
+    public static String getDBUS() { return settings.get("DB_USER"); }
+    public static String getDBPW() { return settings.get("DB_PASSWORD"); }
+    public static String getDBURL() { return settings.get("DB_URL"); }
+    public static String getPrefix() { return settings.get("PREFIX"); }
+    public static String getLogChannelName() { return settings.get("LOGCHANNELNAME"); }
+    public static String getGame() { return settings.get("GAME"); }
+    public static String getInvitelink() { return settings.get("INVITELINK"); }
 }
