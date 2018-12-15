@@ -37,7 +37,6 @@ public class Main {
     //LISTENERS
     private static void addListeners() {
         builder.addEventListener(new ReadyListener());
-        builder.addEventListener(new LogListener());
         builder.addEventListener(new MessageListener());
         builder.addEventListener(new AutoroleHandler());
         builder.addEventListener(new DVCbGHandler());
@@ -52,7 +51,7 @@ public class Main {
         CommandHandler.commands.put(Config.CMD_POKE, new CmdPoke());
         CommandHandler.commands.put(Config.CMD_HELP, new CmdHelp());
         CommandHandler.commands.put(Config.CMD_AUTOCHAN, new CmdAutochannel());
-      //CommandHandler.commands.put(Config.CMD_ZNAKE, new CmdZnake());
+        //CommandHandler.commands.put(Config.CMD_ZNAKE, new CmdZnake());
         CommandHandler.commands.put(Config.CMD_ABOUT, new CmdAbout());
         CommandHandler.commands.put(Config.CMD_DEBUG, new CmdDebug());
         CommandHandler.commands.put(Config.CMD_SHUTDOWN, new CmdShutdown());
@@ -63,5 +62,6 @@ public class Main {
         CommandHandler.commands.put(Config.CMD_LOOTBOX, new CmdLootbox());
         CommandHandler.commands.put(Config.CMD_initializeDVCbG, new CmdDVCbGInitialize());
         CommandHandler.commands.put(Config.CMD_DVCBGIGNORE, new CmdDVCbGIgnore());
+        CommandHandler.commands.put(Config.CMD_BATTLEOFDISCORDIA, new CmdBattleOfDiscordia());
     }
 }
