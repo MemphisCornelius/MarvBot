@@ -12,16 +12,19 @@ public class CommandHandler {
 
     public static void handleCommand(CommandParser.commandContainer cmd) throws IOException, ParseException {
 
-        if (commands.containsKey(cmd.invoke.toLowerCase())) {
+        if (commands.containsKey(cmd.invoke)) {
 
-            boolean safe = commands.get(cmd.invoke.toLowerCase()).called(cmd.args, cmd.event);
+            boolean safe = commands.get(cmd.invoke).called(cmd.args, cmd.event);
 
             if (!safe) {
-                commands.get(cmd.invoke.toLowerCase()).action(cmd.args, cmd.event);
-                commands.get(cmd.invoke.toLowerCase()).executed(safe, cmd.event);
+                commands.get(cmd.invoke).action(cmd.args, cmd.event);
+                commands.get(cmd.invoke).executed(safe, cmd.event);
             } else {
-                commands.get(cmd.invoke.toLowerCase()).executed(safe, cmd.event);
+                commands.get(cmd.invoke).executed(safe, cmd.event);
             }
+
         }
+
     }
+
 }

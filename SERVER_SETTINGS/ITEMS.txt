@@ -1,0 +1,149 @@
+--KEYS-AND-lootboxES--
+
+Common lootbox, c, 0, 0, 0
+Uncommon lootbox, u, 0, 0, 0
+Rare lootbox, r, 0, 0, 0
+Epic lootbox, e, 0, 0, 0
+Legendary lootbox, l, 0, 0, 0
+
+Common key, c, 0, 0, 0
+Uncommon key, u, 0, 0, 0
+Rare key, r, 0, 0, 0
+Epic key, e, 0, 0, 0
+Legendary key, l, 0, 0, 0
+
+--COMMON--30--
+
+Handmade Bow, c, 5, 0, 0
+Handmade Sword, c, 5, 0, 0
+Broken Dagger, c, 3, 0, 0
+Small Potion, c, 0, 5, 0
+Crossbow, c, 10, 0, 0
+Old Staff, c, 4, 0, 0
+Apprentice's Tunic, c, 0, 0, 0,2
+Elven Bracers, c, 0, 0, 0,3
+Potion, c, 0, 10, 0
+Magic Stick, c, 1, 2, 0
+Broken Sword, c, 1, 0, 0
+Novice Wand, c, 5, 0, 0
+Leather Gloves, c, 0, 0, 0,1
+Wooden Shield, c, 0, 0, 0,15
+Bone Helmet, c, 0, 0, 0,2
+Bastard Sword, c, 6, 0, 0
+Rusted Breastplate, c, 0, 0, 0,1
+Broken Hammer, c, 7, 0, 0
+Rusted Sword, c, 4, 0, 0
+Wooden Helmet, c, 0, 0, 0,15 
+Small Dagger, c, 5, 0, 0
+Wooden Spear, c, 3, 0, 0
+Rusted Blade, c, 1, 0, 0
+Slingshot, c, 1, 0, 0
+Stone Bracers, c, 0, 0, 0,15
+Cursed Potion, c, 5, 5, 0
+Apprentice's Staff, c, 6, 0, 0
+Broken Axe, c, 5, 0, 0
+Bone Bracers, c, 0, 0, 0,2
+Shortbow, c, 4, 0, 0
+Captain's Saber, c, 8, 0, 0
+
+--UNCOMMON--30--
+
+Elven Staff, u, 13, 0, 0
+Mystic Wand, u, 16, 0, 0
+Light Sword, u, 9, 5, 0
+Shortsword, u, 10, 0, 0
+Crucifix of Blood, u, 18, 2, 0
+Reinforced Bow, u, 16, 0, 0
+Cursed Dagger, u, 18, 0, 0
+Iron Shield, u, 0, 0, 0,25
+Magic Spear, u, 10, 2, 0
+Poisoned Dagger, u, 16, 0, 0
+Charged Hammer, u, 20, 0, 0
+Bloody Axe, u, 15, 0, 0
+Silver Sword, u, 17, 0, 0
+Silver Bow, u, 15, 0, 0
+Soldier's Boots, u, 0, 0, 0,3
+Traveler's Boots, u, 0, 0, 0,4
+Soldier's Gloves, u, 0, 0, 0,3
+Traveler's Gloves, u, 0, 0, 0,4
+Iron Sword, u, 12, 0, 0
+Iron Hammer, u, 15, 0, 0
+Wizard's Robe, u, 0, 0, 0,5
+Cold Bow, u, 14, 0, 0
+Hot Bow, u, 14, 0, 0
+Reinforced Crossbow, u, 16, 0, 0
+Rogue's Dagger, u, 13, 0, 0
+Rogue's Cloak, u, 0, 0, 0,4
+Iron Breastplate, u, 0, 0, 0,5
+Sharp Longsword, u, 13, 0, 0
+Enchanted Dagger, u, 17, 0, 0
+Enchanted Bow, u, 18, 0, 0 
+
+--RARE--25--
+
+Ivory Wand, r, 25, 0, 0
+Scythe of Justice, r, 33, 0, 0
+Book of Miracles, r, 20, 15, 0
+Moon Bracers, r, 0, 5, 0,25
+War Axe, r, 33, 0, 0
+Heavy Axe, r, 26, 0, 0
+Dark Sword, r, 22, 0, 0
+Stealth Bow, r, 23, 0, 0
+Sorcerers Staff, r, 27, 0, 0
+Warchiefs Armor, r, 0, 0, 0,6
+Holy Potion, r, 0, 30, 0
+Windrangers Bow, r, 26, 0, 0
+Crystal Dagger, r, 28, 0, 0
+Fiery Sword, r, 28, 0, 0
+Ritual Dagger, r, 31, 0, 0
+Book of Knowledge, r, 32, 0, 0
+Book of Specters, r, 27, 0, 0
+Spectral Sword, r, 30, 0, 0
+Chromatic Sword, r, 29, 0, 0
+Sorcerer's Tunic, r, 0, 0, 0,4
+Windrangers Boots, r, 0, 0, 0,5
+Holy Shield, r, 0, 0, 0,7
+Spellbreaker's Armor, r, 0, 0, 0,5
+Voodoo Potion, r, 0, 25, 0
+Chain Blades, r, 15, 15, 0 
+
+--EPIC--20--
+
+Greatstaff, e, 40, 0, 0
+Book of Visions, e, 25, 12, 0
+Leviathan Axe, e, 45, 0, 0
+Runesword, e, 39, 0, 0
+Runespear, e, 39, 0, 0
+Runehammer, e, 20, 20, 0
+Enchanted Longsword, e, 36, 0 ,0
+Scepter of Summoning, e, 38, 0, 0
+Doomhammer, e, 40, 0, 0
+Gladiator's Longbow, e, 46, 0, 0
+Sword of Justice, e, 40, 0, 0
+Stormforged Axe, e, 41, 0, 0
+Potion of Heroism, e, 0, 47, 0
+Champion's Sword, e, 44, 0, 0
+Wondrous Wand, e, 22, 22, 0
+Archmage's Staff, e, 42, 0, 0
+Deathscythe, e, 40, 0, 0
+Demonbane Armor, e, 0, 0, 0,7
+Gladiator's Armor, e, 0, 0, 0,8
+Runebound Armor, e, 0, 0, 0,6
+
+--LEGENDARY--15--
+
+Frostmourne, l, 59, 0, 0
+Shadowmourne, l, 58, 0, 0
+Val'anyr, l, 40, 15, 0
+Stormbringer, l, 63, 0, 0
+Elder Wand, l, 55, 0, 0
+Atiesh, l, 30, 30, 0
+Mj�lnir, l, 57, 0, 0
+Rhok'delar, l, 56, 0, 0
+Quel'delar, l, 55, 0, 0
+Twig of Yggdrasil, l, 0, 50, 0
+Freya's Potion, l, 0, 65, 0
+Thor's Armor, l, 0, 0, 0,9
+Odin's Blessing, l, 0, 0, 1
+Ysera's Blessing, l, 0, 0, 1
+Medivh's Robe, l, 0, 0, 0,8
