@@ -110,7 +110,7 @@ public class CmdAutochannel implements Command, Serializable {
 
             msg(tc, String.format("Successfully unset auto channel state of `%s`.", vc.getName()));
 
-            String sql = "DELETE * FROM autoChan WHERE vcid = ? AND gid = ?";
+            String sql = "DELETE FROM autoChan WHERE vcid = ? AND gid = ?";
 
             try (Connection con = DriverManager.getConnection(url, usr, pw);
                  PreparedStatement pst = con.prepareStatement(sql)) {
