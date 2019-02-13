@@ -10,7 +10,8 @@ import java.util.Scanner;
 
 public class DataBase {
 
-    private DataBase(){}
+    private DataBase() {
+    }
 
     private static String url = ServerSettingsHandler.getDBURL();
     private static String usr = ServerSettingsHandler.getDBUS();
@@ -90,22 +91,30 @@ public class DataBase {
                 " PRIMARY KEY (entry)," +
                 " FOREIGN KEY (pid) REFERENCES player(pid))";
 
+        String autochanTable = "CREATE TABLE IF NOT EXISTS autoChan" +
+                "(vcid VARCHAR(18)," +
+                " gid VARCHAR(18)," +
+                " PRIMARY KEY (vcid))";
+
         try {
 
             Connection conn = DriverManager.getConnection(url, usr, pw);
             Statement stmt = conn.createStatement();
 
-            stmt.executeUpdate(lootboxesTable);
-            stmt.executeUpdate(userTimeTable);
-            stmt.executeUpdate(autoRolesTable);
-            stmt.executeUpdate(vcNameTable);
-            stmt.executeUpdate(dvcbgIgnoreTable);
-            stmt.executeUpdate(playerTable);
-            stmt.executeUpdate(itemTable);
-            stmt.executeUpdate(inventoryTable);
-            stmt.executeUpdate(mapTable);
-            stmt.executeUpdate(resetsTable);
-            stmt.executeUpdate("INSERT IGNORE INTO player VALUES (0, NULL, NULL, NULL, NULL, NULL )");
+            stmt.addBatch(lootboxesTable);
+            stmt.addBatch(userTimeTable);
+            stmt.addBatch(autoRolesTable);
+            stmt.addBatch(vcNameTable);
+            stmt.addBatch(dvcbgIgnoreTable);
+            stmt.addBatch(playerTable);
+            stmt.addBatch(itemTable);
+            stmt.addBatch(inventoryTable);
+            stmt.addBatch(mapTable);
+            stmt.addBatch(resetsTable);
+            stmt.addBatch(autochanTable);
+            stmt.addBatch("INSERT IGNORE INTO player VALUES (0, NULL, NULL, NULL, NULL, NULL )");
+
+            stmt.executeBatch();
 
             stmt.close();
             conn.close();
@@ -125,7 +134,7 @@ public class DataBase {
 
                 ResultSet rs = st.executeQuery("SELECT * FROM map WHERE x = 49 AND y = 49");
 
-                if(!rs.next()) {
+                if (!rs.next()) {
 
 
                     con.setAutoCommit(false);
@@ -196,18 +205,18 @@ public class DataBase {
         String querry = "SELECT * FROM items";
         String insert = "INSERT INTO items(name, rarity, dmg, heal, dmgabs) VALUES (?, ?, ?, ?, ?)";
 
-        try(Connection con = DriverManager.getConnection(url, usr, pw)){
+        try (Connection con = DriverManager.getConnection(url, usr, pw)) {
 
-            try(PreparedStatement pst0 = con.prepareStatement(querry);
-                PreparedStatement pst1 = con.prepareStatement(insert)) {
+            try (PreparedStatement pst0 = con.prepareStatement(querry);
+                 PreparedStatement pst1 = con.prepareStatement(insert)) {
 
-                if(!pst0.executeQuery().next()) {
+                if (!pst0.executeQuery().next()) {
 
                     con.setAutoCommit(false);
 
-                    for (String[] str: items) {
+                    for (String[] str : items) {
 
-                        if(str[0] != null) {
+                        if (str[0] != null) {
 
                             pst1.setString(1, str[0].trim());
                             pst1.setString(2, str[1].trim());
@@ -223,7 +232,7 @@ public class DataBase {
                     con.commit();
 
                 }
-            }catch (SQLException ex) {
+            } catch (SQLException ex) {
                 ex.printStackTrace();
                 try {
 
@@ -233,7 +242,7 @@ public class DataBase {
                     ex2.printStackTrace();
                 }
             }
-        }catch(SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }

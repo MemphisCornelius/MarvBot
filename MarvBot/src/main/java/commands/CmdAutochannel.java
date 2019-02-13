@@ -1,5 +1,6 @@
 package commands;
 
+import core.ServerSettingsHandler;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.Permission;
@@ -11,6 +12,7 @@ import util.Time;
 
 import java.awt.Color;
 import java.io.*;
+import java.sql.*;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -26,6 +28,10 @@ import java.util.HashMap;
  */
 
 public class CmdAutochannel implements Command, Serializable {
+
+    private static String url = ServerSettingsHandler.getDBURL();
+    private static String usr = ServerSettingsHandler.getDBUS();
+    private static String pw = ServerSettingsHandler.getDBPW();
 
     // Hier werden die Autochannels mit der dazugehörigen Guild registriert
     private static HashMap<VoiceChannel, Guild> autochans = new HashMap<>();
@@ -69,8 +75,22 @@ public class CmdAutochannel implements Command, Serializable {
             error(tc, "This channel is just set as an auto channel.");
         } else {
             autochans.put(vc, g);
-            save();
+
             msg(tc, String.format("Successfully set voice channel `%s` as auto channel.", vc.getName()));
+
+            String sql = "INSERT INTO autoChan VALUES (?, ?)";
+
+            try (Connection con = DriverManager.getConnection(url, usr, pw);
+                 PreparedStatement pst = con.prepareStatement(sql)) {
+
+                pst.setString(1, vc.getId());
+                pst.setString(2, g.getId());
+
+                pst.executeUpdate();
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -87,8 +107,22 @@ public class CmdAutochannel implements Command, Serializable {
             error(tc, String.format("Voice channel `%s` is not set as auto channel.", vc.getName()));
         } else {
             autochans.remove(vc);
-            save();
+
             msg(tc, String.format("Successfully unset auto channel state of `%s`.", vc.getName()));
+
+            String sql = "DELETE * FROM autoChan WHERE vcid = ? AND gid = ?";
+
+            try (Connection con = DriverManager.getConnection(url, usr, pw);
+                 PreparedStatement pst = con.prepareStatement(sql)) {
+
+                pst.setString(1, vc.getId());
+                pst.setString(2, g.getId());
+
+                pst.executeUpdate();
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -99,7 +133,18 @@ public class CmdAutochannel implements Command, Serializable {
     */
     public static void unsetChan(VoiceChannel vc) {
         autochans.remove(vc);
-        save();
+        String sql = "DELETE * FROM autoChan WHERE vcid = ?";
+
+        try (Connection con = DriverManager.getConnection(url, usr, pw);
+             PreparedStatement pst = con.prepareStatement(sql)) {
+
+            pst.setString(1, vc.getId());
+
+            pst.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     /*
@@ -114,51 +159,24 @@ public class CmdAutochannel implements Command, Serializable {
         tc.sendMessage(new EmbedBuilder().setDescription(sb.toString()).build()).queue();
     }
 
-    /*
-        Speichert das Register mit IDs in einer Save File.
-    */
-    private static void save() {
-
-        File path = new File("SERVER_SETTINGS/");
-        if (!path.exists())
-            path.mkdir();
-
-        HashMap<String, String> out = new HashMap<>();
-
-        autochans.forEach((v, g) -> out.put(v.getId(), g.getId()));
-
-        try {
-            FileOutputStream fos = new FileOutputStream("SERVER_SETTINGS/autochannels.dat");
-            ObjectOutputStream oos = new ObjectOutputStream(fos);
-            oos.writeObject(out);
-            oos.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
 
     /*
         Läd das Register mit Guild-Getter und VC-Getter aus der Save File,
         wenn diese existiert.
     */
     public static void load(JDA jda) {
-        File file = new File("SERVER_SETTINGS/autochannels.dat");
-        if (file.exists()) {
-            try {
-                FileInputStream fis = new FileInputStream(file);
-                ObjectInputStream ois = new ObjectInputStream(fis);
-                HashMap<String, String> out = (HashMap<String, String>) ois.readObject();
-                ois.close();
+        try (Connection con = DriverManager.getConnection(url, usr, pw);
+             Statement st = con.createStatement()) {
 
-                out.forEach((vid, gid) -> {
-                    Guild g = getGuild(gid, jda);
-                    autochans.put(getVchan(vid, g), g);
-                });
+            ResultSet rs = st.executeQuery("SELECT  * FROM autoChan");
 
-            } catch (IOException | ClassNotFoundException e) {
-                e.printStackTrace();
+            while (rs.next()) {
+                autochans.put(jda.getVoiceChannelById(rs.getString(1)),
+                        jda.getGuildById(rs.getString(2)));
             }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
@@ -228,9 +246,9 @@ public class CmdAutochannel implements Command, Serializable {
     @Override
     public String help() {
         return String.format("**USAGE:**\n" +
-                ":white_small_square:  `%s%s set <Chan ID>`  -  Set voice chan as auto channel\n" +
-                ":white_small_square:  `%s%s unset <Chan ID>`  -  Unset voice chan as auto chan\n" +
-                ":white_small_square:  `%s%s list`  -  Display all registered auto chans\n",
+                        ":white_small_square:  `%s%s set <Chan ID>`  -  Set voice chan as auto channel\n" +
+                        ":white_small_square:  `%s%s unset <Chan ID>`  -  Unset voice chan as auto chan\n" +
+                        ":white_small_square:  `%s%s list`  -  Display all registered auto chans\n",
                 Config.PREFIX, Config.CMD_AUTOCHAN, Config.PREFIX, Config.CMD_AUTOCHAN, Config.PREFIX, Config.CMD_AUTOCHAN);
     }
 }
