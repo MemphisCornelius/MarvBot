@@ -9,7 +9,7 @@ public enum Direction {
         this.dir = dir;
     }
 
-    public String dir() {
+    public String getDir() {
         return dir;
     }
 

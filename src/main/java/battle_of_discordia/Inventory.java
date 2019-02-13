@@ -5,24 +5,26 @@ import util.TableBuilder;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 public class Inventory {
 
     private String pid;
-    private HashMap<Item, Integer> content;
+    private HashMap<Integer, Integer> content;
 
     private static String url = ServerSettingsHandler.getDBURL();
     private static String usr = ServerSettingsHandler.getDBUS();
     private static String pw = ServerSettingsHandler.getDBPW();
 
-    public Inventory(String pid) {
+    Inventory(String pid) {
 
         this.pid = pid;
 
         String querry = "SELECT number, iid FROM inventory WHERE pid = ?";
 
-        content = new HashMap<>();
+        this.content = new HashMap<>();
 
         try (Connection con = DriverManager.getConnection(url, usr, pw);
              PreparedStatement pst = con.prepareStatement(querry)) {
@@ -32,26 +34,26 @@ public class Inventory {
 
             if (rs.next()) {
                 do {
-                    content.put(new Item(rs.getInt(2)), rs.getInt(1));
+                    this.content.put(rs.getInt(2), rs.getInt(1));
                 } while (rs.next());
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
     }
 
     public boolean hasItem(Item item) {
 
-        return (content.containsKey(item) && (content.get(item) != 0));
+        return (content.containsKey(item.getId())) && (content.get(item.getId()) > 0);
 
     }
 
-    public int getNuberOfItem(Item item) {
+    int getNumberOfItem(Item item) {
 
         if(hasItem(item)) {
-            return content.get(item);
+            int i = content.get(item.getId());
+            return i;
         }else {
             return 0;
         }
@@ -62,8 +64,6 @@ public class Inventory {
         String insert = "INSERT INTO inventory (number, pid, iid) VALUES (?, ?, ?)";
         String update = "UPDATE inventory SET number = ? WHERE pid = ? AND iid = ?";
         String querry = "SELECT number FROM inventory WHERE pid = ? AND iid = ?";
-
-        content = new HashMap<>();
 
         try (Connection con = DriverManager.getConnection(url, usr, pw);
              PreparedStatement pst = con.prepareStatement(insert);
@@ -80,14 +80,14 @@ public class Inventory {
                 pst.setString(2, pid);
                 pst.setInt(3, item.getId());
                 pst.executeUpdate();
-                content.put(item, number);
+                content.put(item.getId(), number);
             } else {
                 number += rs.getInt(1);
                 pst2.setInt(1, number);
                 pst2.setString(2, pid);
                 pst2.setInt(3, item.getId());
                 pst2.executeUpdate();
-                content.replace(item, number);
+                content.replace(item.getId(), number);
             }
 
         } catch (SQLException e) {
@@ -98,29 +98,36 @@ public class Inventory {
     public void remove(Item item, int number) {
 
         String update = "UPDATE inventory SET number = ? WHERE pid = ? AND iid = ?";
+        String remove = "DELETE FROM inventory WHERE number = 0";
 
 
         try (Connection con = DriverManager.getConnection(url, usr, pw);
-             PreparedStatement pst = con.prepareStatement(update)) {
+             PreparedStatement pst0 = con.prepareStatement(update);
+             PreparedStatement pst1 = con.prepareStatement(remove)) {
 
-            pst.setInt(1, number);
-            pst.setString(2, pid);
-            pst.setInt(3, item.getId());
+            pst0.setInt(1, (getNumberOfItem(item) - number));
+            pst0.setString(2, pid);
+            pst0.setInt(3, item.getId());
+            pst0.executeUpdate();
 
-            content.replace(item, number);
+            pst1.executeUpdate();
+
+            content.replace(item.getId(), number);
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public String getIInformation() {
+    public String[] getIInformation() {
+
+        List<String[][]> rtrn = new ArrayList<>();
 
         if (content.isEmpty()) {
-            return "```The inventory is empty.```";
+            return new String[] {"```The inventory is empty.```"};
         }
 
-        String infos[][];
+        String[][] infos;
         ArrayList<String[]> infoslist = new ArrayList<>();
 
         String item = "SELECT * FROM items WHERE iid = ?";
@@ -128,13 +135,13 @@ public class Inventory {
         try (Connection con = DriverManager.getConnection(url, usr, pw);
              PreparedStatement pst = con.prepareStatement(item)) {
 
-            for (Item i : content.keySet()) {
+            for (int i : content.keySet()) {
 
-                pst.setInt(1, i.getId());
+                pst.setInt(1, i);
                 ResultSet rs = pst.executeQuery();
                 rs.next();
 
-                String info[] = {String.valueOf(rs.getInt(1)),
+                String[] info = {String.valueOf(rs.getInt(1)),
                         rs.getString(2),
                         String.valueOf(content.get(i)),
                         rs.getString(3),
@@ -160,17 +167,28 @@ public class Inventory {
             }
 
         } else {
-            return "The inventory is empty.";
+            return new String[] {"```The inventory is empty.```"};
         }
 
-        TableBuilder tb = new TableBuilder();
-        tb.codeblock(true).frame(true).autoAdjust(true).
+        TableBuilder tb = new TableBuilder().
+                codeblock(true).frame(true).autoAdjust(true).
                 setVerticalOutline('|').setHorizontalOutline('-').
                 setCrossDelimiter('+').setHeaderCrossDelimiter('+').
                 setHeaderDelimiter('=').setRowDelimiter('-').setColumnDelimiter('|').
-                setHeaders("ItemID", "ItemName", "Number", "Rarity", "Heal", "Damage", "Number absorption").setValues(infos);
+                setHeaders("ItemID", "ItemName", "Quantity", "Rarity", "Heal", "Damage", "Damage absorption");
 
-        return tb.build();
 
+
+        for(int i=0;i<infos.length;i+=10){
+            rtrn.add(Arrays.copyOfRange(infos, i, Math.min(infos.length,i+10)));
+        }
+
+        String[] strings = new String[rtrn.size()];
+
+        for (int i = 0; i < strings.length; i++) {
+            strings[i] = tb.setValues(rtrn.get(i)).build();
+        }
+
+        return strings;
     }
 }

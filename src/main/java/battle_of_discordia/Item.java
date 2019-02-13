@@ -65,7 +65,63 @@ public class Item {
                 this.dmgabs = rs.getDouble(6);
 
             }else {
-                throw new IllegalArgumentException("There is no item with this id!");
+                throw new IllegalArgumentException("There is no item with this id! [" + id + "]");
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public Item(String name) {
+
+        String sql = "SELECT * FROM items WHERE name = ?";
+
+        try (Connection con = DriverManager.getConnection(url, usr, pw);
+             PreparedStatement pst = con.prepareStatement(sql)) {
+
+            pst.setString(1, name);
+            ResultSet rs = pst.executeQuery();
+
+            if (rs.next()) {
+
+                this.id = rs.getInt(1);
+                this.name = rs.getString(2);
+                this.rarity = rs.getString(3);
+                this.dmg = rs.getDouble(4);
+                this.heal = rs.getDouble(5);
+                this.dmgabs = rs.getDouble(6);
+
+            }else {
+                throw new IllegalArgumentException("There is no item with this name! [" + name + "]");
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public Item(char rarity) {
+
+        String sql = "SELECT * FROM items WHERE rarity = ? AND iid > 10 ORDER BY RAND() LIMIT 1";
+
+        try (Connection con = DriverManager.getConnection(url, usr, pw);
+             PreparedStatement pst = con.prepareStatement(sql)) {
+
+            pst.setString(1, String.valueOf(rarity).toLowerCase());
+            ResultSet rs = pst.executeQuery();
+
+            if (rs.next()) {
+
+                this.id = rs.getInt(1);
+                this.name = rs.getString(2);
+                this.rarity = rs.getString(3);
+                this.dmg = rs.getDouble(4);
+                this.heal = rs.getDouble(5);
+                this.dmgabs = rs.getDouble(6);
+
+            }else {
+                throw new IllegalArgumentException("There is no item with this rarity! [" + rarity + "]");
             }
 
         } catch (SQLException e) {
@@ -96,4 +152,6 @@ public class Item {
     public double getDmgabs() {
         return dmgabs;
     }
+
+
 }

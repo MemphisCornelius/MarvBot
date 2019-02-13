@@ -35,7 +35,7 @@ public class Resets {
                 pst1.executeUpdate();
             } else if(Duration.between(LocalDateTime.parse(rs.getString(1), Config.formatter), LocalDateTime.now()).toMillis() >= 0) {
 
-                String truncate[] = {"inventory", "map", "resets"};
+                String[] truncate = {"inventory", "map", "resets"};
 
                 for (String s : truncate) {
                     st.executeUpdate("TRUNCATE TABLE " + s);

@@ -7,10 +7,11 @@ import util.TableBuilder;
 import java.awt.Point;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
-public class Player{
+public class Player {
 
     private final String id;
     private String name;
@@ -138,12 +139,46 @@ public class Player{
         return pointsaround;
     }
 
+    public List<String> getPlayersAround(int arround) {
+
+        Point[] points = getAround(coordinate, arround);
+        ArrayList<String> players = new ArrayList<>();
+
+        String sql = "SELECT pid FROM player WHERE cx = ? AND cy = ?";
+
+        try (Connection con = DriverManager.getConnection(url, usr, pw);
+             PreparedStatement pst = con.prepareStatement(sql)) {
+
+            for (int i = 0; i < 9; i++) {
+
+                pst.setInt(1, points[i].x);
+                pst.setInt(2, points[i].y);
+
+                ResultSet rs0 = pst.executeQuery();
+
+                if (rs0.next()) {
+                    if (rs0.getString(1) != null) {
+                        players.add(rs0.getString(1));
+                    }
+                }
+            }
+
+            players.remove(id);
+
+            return players;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public static String leaderBoard() {
 
         String[][] lb;
         ArrayList<String[]> lblist = new ArrayList<>();
 
-        String points = "SELECT name, points FROM player WHERE pid != 0 ORDER BY points DESC";
+        String points = "SELECT name, points FROM player WHERE pid != 0 ORDER BY points DESC LIMIT 10";
 
         try (Connection con = DriverManager.getConnection(url, usr, pw);
              PreparedStatement pst = con.prepareStatement(points)) {
@@ -171,17 +206,17 @@ public class Player{
             for (int i = 0; i <= lblist.size() - 1; i++) {
                 lb[i] = lblist.get(i);
             }
-        }else {
+        } else {
             return "```No leaderboard available```";
         }
 
 
-        TableBuilder tb = new TableBuilder();
-        tb.codeblock(true).frame(true).autoAdjust(true).
-                setVerticalOutline('|').setHorizontalOutline('-').
-                setCrossDelimiter('+').setHeaderCrossDelimiter('+').
-                setHeaderDelimiter('=').setRowDelimiter('-').setColumnDelimiter('|').
-                setHeaders("name", "points").setValues(lb);
+        TableBuilder tb = new TableBuilder()
+                .codeblock(true).frame(true).autoAdjust(true).
+                        setVerticalOutline('|').setHorizontalOutline('-').
+                        setCrossDelimiter('+').setHeaderCrossDelimiter('+').
+                        setHeaderDelimiter('=').setRowDelimiter('-').setColumnDelimiter('|').
+                        setHeaders("name", "points").setValues(lb);
 
         return tb.build();
 
@@ -268,12 +303,19 @@ public class Player{
         save();
     }
 
-    public void heal(int hp) {
-        if ((this.hp += hp) >= 120) {
+    public void use(Item item) {
+        int rn = new Random().nextInt(100) + 1;
+
+        if ((this.hp += item.getHeal()) >= 120) {
             this.hp = 120;
         } else {
-            this.hp += hp;
+            this.hp += item.getHeal();
         }
+
+        if (rn < 50)
+            inv.remove(item, 1);
+
+
         save();
     }
 
@@ -281,65 +323,54 @@ public class Player{
 
         if (inv.hasItem(item)) {
 
-            Point points[] = getAround(coordinate, 1);
-            ArrayList<String> pids = new ArrayList<>();
-
-            double dmg = 0;
             double dmgabs = 0;
+            Item defense = null;
 
-            String sql = "SELECT pid FROM map WHERE x = ? AND y = ?";
-            String dmgQ = "SELECT dmg FROM items WHERE iid = ?";
-            String dmgabsQ = "SELECT MAX(DISTINCT i.dmgabs), inv.iid FROM items i, inventory inv WHERE inv.pid = ? AND inv.iid = i.iid";
+            String dmgabsQ = "SELECT MAX(DISTINCT i.dmgabs), inv.iid " +
+                    "FROM items i, inventory inv " +
+                    "WHERE inv.pid = ? AND inv.iid = i.iid AND i.dmgabs > 0";
 
             try (Connection con = DriverManager.getConnection(url, usr, pw);
-                 PreparedStatement pst0 = con.prepareStatement(sql);
-                 PreparedStatement pst1 = con.prepareStatement(dmgQ);
                  PreparedStatement pst2 = con.prepareStatement(dmgabsQ)) {
-
-                for (int i = 0; i < 9; i++) {
-
-                    pst0.setInt(1, points[i].x);
-                    pst0.setInt(2, points[i].y);
-
-                    ResultSet rs0 = pst0.executeQuery();
-
-                    if (rs0.next()) {
-                        pids.add(rs0.getString(1));
-                    }
-                }
-
-                pst1.setInt(1, item.getId());
-                ResultSet rs1 = pst1.executeQuery();
-
-                if (rs1.next()) {
-                    dmg = rs1.getDouble(1);
-                }
 
                 pst2.setString(1, p.getId());
                 ResultSet rs2 = pst2.executeQuery();
 
                 if (rs2.next()) {
-                    dmgabs = rs2.getDouble(1);
 
-                    p.inv.remove(new Item(rs2.getInt(2)), p.inv.getNuberOfItem(new Item(rs2.getInt(2))) - 1);
+                    int i = rs2.getInt(2);
+                    if (i != 0)
+                        defense = new Item(i);
+
                 }
 
             } catch (SQLException e) {
                 e.printStackTrace();
             }
 
-            if (!pids.contains(p.id)) {
+            if (!getPlayersAround(1).contains(p.getId())) {
                 throw new IllegalArgumentException("You cannot attack a player who is not nearby!");
             } else {
 
-                if ((p.hp - ((1 - dmgabs) * dmg)) <= 0) {
+                if (defense != null) {
+                    dmgabs = defense.getDmgabs();
+                    p.use(defense);
+                }
 
-                    p.hp = p.hp - ((1 - dmgabs) * dmg);
+                if ((p.hp - ((1 - dmgabs) * item.getDmg())) > 0) {
+
+                    p.hp = p.hp - ((1 - dmgabs) * item.getDmg());
 
                 } else {
                     p.die(this);
                 }
-                this.points += ((1 - dmgabs) * dmg);
+
+                use(item);
+
+                this.points += ((1 - dmgabs) * item.getDmg());
+
+                save();
+                p.save();
             }
         } else {
             throw new IllegalArgumentException("You have to own the weapon you want to use!");
@@ -365,16 +396,22 @@ public class Player{
             pst1.setInt(2, i);
             ResultSet rs1 = pst1.executeQuery();
             while (rs1.next()) {
-                inv.remove(new Item(rs1.getInt(1)), 0);
+                Item item = new Item(rs1.getInt(1));
+                inv.remove(item, p.getInv().getNumberOfItem(item));
+
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        points = 0;
+        Random r = new Random();
+        coordinate.move(r.nextInt(50), r.nextInt(50));
+        hp = 100;
+
+        points -= 20;
         save();
-        p.points += 10;
+        p.points += 20;
         p.save();
 
     }
@@ -396,7 +433,7 @@ public class Player{
 
     private void save() {
 
-        String sql = "UPDATE player SET name = ?, hp = ?, cx = ?, cy = ? WHERE pid = ?";
+        String sql = "UPDATE player SET name = ?, hp = ?, cx = ?, cy = ?, points = ? WHERE pid = ?";
         String map0 = "UPDATE map SET pid = null WHERE pid = ?";
         String map1 = "UPDATE map SET pid = ? WHERE x = ? AND y = ?";
 
@@ -409,7 +446,8 @@ public class Player{
             pst0.setDouble(2, hp);
             pst0.setInt(3, coordinate.x);
             pst0.setInt(4, coordinate.y);
-            pst0.setString(5, id);
+            pst0.setDouble(5, points);
+            pst0.setString(6, id);
 
             pst0.executeUpdate();
 
@@ -433,11 +471,13 @@ public class Player{
         String deletei = "DELETE FROM inventory WHERE pid = ?";
         String map = "UPDATE map SET pid = null WHERE pid = ?";
         String deletep = "DELETE FROM player WHERE pid = ?";
+        String deleter = "DELETE FROM resets WHERE pid = ?";
 
         try (Connection con = DriverManager.getConnection(url, usr, pw);
              PreparedStatement pst0 = con.prepareStatement(deletei);
-             PreparedStatement pst2 = con.prepareStatement(deletep);
-             PreparedStatement pst1 = con.prepareStatement(map)) {
+             PreparedStatement pst3 = con.prepareStatement(deletep);
+             PreparedStatement pst1 = con.prepareStatement(map);
+             PreparedStatement pst2 = con.prepareStatement(deleter)) {
 
             pst0.setString(1, id);
             pst0.executeUpdate();
@@ -447,6 +487,9 @@ public class Player{
 
             pst2.setString(1, id);
             pst2.executeUpdate();
+
+            pst3.setString(1, id);
+            pst3.executeUpdate();
 
         } catch (SQLException e) {
             e.printStackTrace();
