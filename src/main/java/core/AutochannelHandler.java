@@ -37,17 +37,14 @@ public class AutochannelHandler extends ListenerAdapter {
         Guild g = event.getGuild();
 
         if (autochans.containsKey(vc)) {
-            VoiceChannel nvc = (VoiceChannel) g.getController().createVoiceChannel(vc.getName() + " [AC]")
-                    .setBitrate(vc.getBitrate())
-                    .setUserlimit(vc.getUserLimit())
-                    .complete();
+            vc.createCopy().queue((nvc -> {
 
-            if (vc.getParent() != null)
-                nvc.getManager().setParent(vc.getParent()).queue();
+                nvc.getManager().setName(vc.getName() + " [AC]").queue();
 
-            g.getController().modifyVoiceChannelPositions().selectPosition(nvc).moveTo(vc.getPosition() + 1).queue();
-            g.getController().moveVoiceMember(event.getMember(), nvc).queue();
-            active.add(nvc);
+                g.getController().modifyVoiceChannelPositions().selectPosition((VoiceChannel) nvc).moveTo(vc.getPosition() + 1).queue();
+                g.getController().moveVoiceMember(event.getMember(), (VoiceChannel) nvc).queue();
+                active.add((VoiceChannel) nvc);
+            }));
         }
     }
 
@@ -81,17 +78,15 @@ public class AutochannelHandler extends ListenerAdapter {
         VoiceChannel vc = event.getChannelJoined();
 
         if (autochans.containsKey(vc)) {
-            VoiceChannel nvc = (VoiceChannel) g.getController().createVoiceChannel(vc.getName() + " [AC]")
-                    .setBitrate(vc.getBitrate())
-                    .setUserlimit(vc.getUserLimit())
-                    .complete();
+            VoiceChannel finalVc = vc;
+            vc.createCopy().queue((nvc -> {
 
-            if (vc.getParent() != null)
-                nvc.getManager().setParent(vc.getParent()).queue();
+                nvc.getManager().setName(finalVc.getName() + " [AC]").queue();
 
-            g.getController().modifyVoiceChannelPositions().selectPosition(nvc).moveTo(vc.getPosition() + 1).queue();
-            g.getController().moveVoiceMember(event.getMember(), nvc).queue();
-            active.add(nvc);
+                g.getController().modifyVoiceChannelPositions().selectPosition((VoiceChannel) nvc).moveTo(finalVc.getPosition() + 1).queue();
+                g.getController().moveVoiceMember(event.getMember(), (VoiceChannel) nvc).queue();
+                active.add((VoiceChannel) nvc);
+            }));
         }
 
         vc = event.getChannelLeft();

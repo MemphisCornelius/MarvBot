@@ -9,10 +9,7 @@ import util.MessageMask;
 import util.Time;
 
 import java.awt.Color;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
+import java.time.*;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -42,14 +39,15 @@ public class CmdPoke implements Command {
             content = content.replace(event.getMessage().getMentionedMembers().get(0).getEffectiveName(), "");
             String finalContent = content;
 
-            event.getMessage().getMentionedMembers().get(0).getUser().openPrivateChannel().queue((channel) -> {
-                channel.sendMessage(
-                        new EmbedBuilder().setColor(Color.blue).setAuthor(event.getMessage().getAuthor().getName() + " from #" + event.getGuild().getName(), null, event.getMessage().getAuthor().
-                                getEffectiveAvatarUrl()).setTitle("pokes you:").setDescription(
-                                finalContent
-                        ).setTimestamp(OffsetDateTime.of(LocalDate.now(), LocalTime.now(), ZoneOffset.UTC)).setFooter("ID: " + event.getMessage().getAuthor().getId(), null).build()
-                ).queue();
-            });
+            event.getMessage().getMentionedMembers().get(0).getUser().openPrivateChannel().queue((channel) ->
+                    channel.sendMessage(
+                    new EmbedBuilder().setColor(Color.blue).setAuthor(
+                            event.getMessage().getAuthor().getName() + " from #" + event.getGuild().getName(),
+                            null, event.getMessage().getAuthor().
+                            getEffectiveAvatarUrl()).setTitle("pokes you:").setDescription(
+                            finalContent
+                    ).setTimestamp(Instant.now()).setFooter("ID: " + event.getMessage().getAuthor().getId(), null).build()
+            ).queue());
 
             new Timer().schedule(new TimerTask() {
                 @Override
@@ -72,7 +70,7 @@ public class CmdPoke implements Command {
 
         } else {
 
-            MessageMask.msg(tc, user, Color.RED,"https://vignette.wikia.nocookie.net/timmypedia/images/1/1f/Red-X-in-circle.png/revision/latest?cb=20160924072833", "Invalid arguments!\n\n\n" +
+            MessageMask.msg(tc, user, Color.RED,Config.ERROR_THUMBNAIL, "Invalid arguments!\n\n\n" +
                     String.format("Usage:\n\n\\%s %s <User> <Message>\n", Config.PREFIX, Config.CMD_POKE));
 
         }

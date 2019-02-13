@@ -17,7 +17,7 @@ import java.text.ParseException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class CmdinitializeDVCbG  implements Command {
+public class CmdDVCbGInitialize implements Command {
 
     private static String url = ServerSettingsHandler.getDBURL();
     private static String usr = ServerSettingsHandler.getDBUS();

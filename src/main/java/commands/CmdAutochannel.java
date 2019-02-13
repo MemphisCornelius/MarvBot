@@ -66,7 +66,7 @@ public class CmdAutochannel implements Command, Serializable {
         if (vc == null) {
             error(tc, String.format("Voice channel with the ID `%s` does not exist.", id));
         } else if (autochans.containsKey(vc)) {
-            error(tc, "This channel is just set as auto channel.");
+            error(tc, "This channel is just set as an auto channel.");
         } else {
             autochans.put(vc, g);
             save();
@@ -125,7 +125,6 @@ public class CmdAutochannel implements Command, Serializable {
 
         HashMap<String, String> out = new HashMap<>();
 
-        System.out.println(autochans.size());
         autochans.forEach((v, g) -> out.put(v.getId(), g.getId()));
 
         try {
@@ -195,7 +194,7 @@ public class CmdAutochannel implements Command, Serializable {
                 case "set":
                     // Nimmt "set"/"add" aus den Arguments und übergibt nur die VC ID als Argument.
                     if (args.length < 2) {
-                        MessageMask.msg(tc, user, Color.RED, "https://vignette.wikia.nocookie.net/timmypedia/images/1/1f/Red-X-in-circle.png/revision/latest?cb=20160924072833", help());
+                        MessageMask.msg(tc, user, Color.RED, Config.ERROR_THUMBNAIL, help());
                     } else
                         setChan(args[1], g, tc);
                     break;
@@ -205,16 +204,16 @@ public class CmdAutochannel implements Command, Serializable {
                 case "unset":
                     // Selbes wie in Z. 194
                     if (args.length < 2)
-                        MessageMask.msg(tc, user, Color.RED, "https://vignette.wikia.nocookie.net/timmypedia/images/1/1f/Red-X-in-circle.png/revision/latest?cb=20160924072833", help());
+                        MessageMask.msg(tc, user, Color.RED, Config.ERROR_THUMBNAIL, help());
                     else
                         unsetChan(args[1], g, tc);
                     break;
                 default:
                     // Wen ein nicht definiertes ARguemnt angegeben wurde wird eine Help MSG ausgegeben.
-                    MessageMask.msg(tc, user, Color.RED, "https://vignette.wikia.nocookie.net/timmypedia/images/1/1f/Red-X-in-circle.png/revision/latest?cb=20160924072833", help());
+                    MessageMask.msg(tc, user, Color.RED, Config.ERROR_THUMBNAIL, help());
             }
         } else {
-            MessageMask.msg(tc, user, Color.RED, "https://vignette.wikia.nocookie.net/timmypedia/images/1/1f/Red-X-in-circle.png/revision/latest?cb=20160924072833",
+            MessageMask.msg(tc, user, Color.RED, Config.ERROR_THUMBNAIL,
                     "Missing permissons!\n\n\nYou need administrator-permissons to execute this command!");
         }
 
@@ -228,9 +227,10 @@ public class CmdAutochannel implements Command, Serializable {
 
     @Override
     public String help() {
-        return "**USAGE:**\n" +
-                ":white_small_square:  `-autochannel set <Chan ID>`  -  Set voice chan as auto channel\n" +
-                ":white_small_square:  `-autochannel unset <Chan ID>`  -  Unset voice chan as auto chan\n" +
-                ":white_small_square:  `-autochannel list`  -  Display all registered auto chans\n";
+        return String.format("**USAGE:**\n" +
+                ":white_small_square:  `%s%s set <Chan ID>`  -  Set voice chan as auto channel\n" +
+                ":white_small_square:  `%s%s unset <Chan ID>`  -  Unset voice chan as auto chan\n" +
+                ":white_small_square:  `%s%s list`  -  Display all registered auto chans\n",
+                Config.PREFIX, Config.CMD_AUTOCHAN, Config.PREFIX, Config.CMD_AUTOCHAN, Config.PREFIX, Config.CMD_AUTOCHAN);
     }
 }
