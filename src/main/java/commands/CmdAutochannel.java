@@ -66,7 +66,7 @@ public class CmdAutochannel implements Command, Serializable {
         if (vc == null) {
             error(tc, String.format("Voice channel with the ID `%s` does not exist.", id));
         } else if (autochans.containsKey(vc)) {
-            error(tc, "This channel is just set as auto channel.");
+            error(tc, "This channel is just set as an auto channel.");
         } else {
             autochans.put(vc, g);
             save();
@@ -125,7 +125,6 @@ public class CmdAutochannel implements Command, Serializable {
 
         HashMap<String, String> out = new HashMap<>();
 
-        System.out.println(autochans.size());
         autochans.forEach((v, g) -> out.put(v.getId(), g.getId()));
 
         try {
