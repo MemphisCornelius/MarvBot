@@ -3,6 +3,7 @@ package core;
 import commands.CmdDVCbGIgnore;
 import net.dv8tion.jda.core.audit.ActionType;
 import net.dv8tion.jda.core.audit.AuditLogEntry;
+import net.dv8tion.jda.core.audit.AuditLogKey;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.VoiceChannel;
 import net.dv8tion.jda.core.events.channel.voice.VoiceChannelCreateEvent;
@@ -16,6 +17,7 @@ import net.dv8tion.jda.core.events.guild.voice.GuildVoiceMoveEvent;
 import net.dv8tion.jda.core.events.user.update.UserUpdateGameEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import net.dv8tion.jda.core.requests.restaction.pagination.AuditLogPaginationAction;
+import util.Config;
 
 import java.io.*;
 import java.sql.*;
@@ -157,7 +159,16 @@ public class DVCbGHandler extends ListenerAdapter {
 
     private static void setNameToGame(VoiceChannel vc) {
 
-        if (!getMostGame(vc).isEmpty() //checks if there is a most played game
+        List<Member> members = vc.getMembers();
+        List<String> memberIDs = new ArrayList<>();
+
+        for (Member m : members) {
+            memberIDs.add(m.getUser().getId());
+        }
+
+        if ((memberIDs.size() == 2) &&memberIDs.contains(Config.OWNERID) && memberIDs.contains(Config.ARTURID)) { //#martur
+            vc.getManager().setName("#martur").queue();
+        }else if (!getMostGame(vc).isEmpty() //checks if there is a most played game
                 && !CmdDVCbGIgnore.getDVCbGIgnore().contains(vc.getId()) //checks if this vc is is not ignored
                 && (vc.getGuild().getAfkChannel() == null || !vc.getId().equals(vc.getGuild().getAfkChannel().getId()))) /*checks if vc is not a afk-vc*/ {
             vc.getManager().setName(getMostGame(vc)).queue();
@@ -197,7 +208,9 @@ public class DVCbGHandler extends ListenerAdapter {
         auditLogs.queue((entries) -> {
             if (entries.isEmpty()) return;
             AuditLogEntry entry = entries.get(0);
-            if (!entry.getUser().getId().equals(event.getJDA().getSelfUser().getId())) {
+
+            if (!entry.getUser().getId().equals(event.getJDA().getSelfUser().getId()) ||
+                    event.getNewName().contains("[AC]")) {
                 replace(event.getChannel().getId(), event.getNewValue());
             }
         });

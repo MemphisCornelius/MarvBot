@@ -11,6 +11,9 @@ public class Config {
     //USERS
     public static final String OWNERID = "261918744765399044";
     public static final String DESINGER = "182223737884639232";
+    public static final String ARTURID = "216970882923364352";
+    public static final String RAULID = "307627856710860800";
+    public static final String SIMONID = "426410086588743680";
 
     //PREFIX
     public static final String PREFIX = ServerSettingsHandler.getPrefix();
@@ -26,7 +29,6 @@ public class Config {
 
     //COMMANDS
     public static final String CMD_PING = "ping";
-    public static final String CMD_LOOTBOX = "lootbox";
     public static final String CMD_COINFLIP = "coinflip";
     public static final String CMD_POKE = "poke";
     public static final String CMD_HELP = "help";
@@ -40,7 +42,6 @@ public class Config {
     public static final String CMD_VERSION = "version";
     public static final String CMD_GITHUBISSUE = "ghticket";
     public static final String CMD_AUTOROLE = "autorole";
-    public static final String CMD_INVENTORY = "inventory";
     public static final String CMD_initializeDVCbG = "dvcbg_initialize";
     public static final String CMD_DVCBGIGNORE = "dvcbg_ignore";
     public static final String CMD_BATTLEOFDISCORDIA = "bod";
