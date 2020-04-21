@@ -12,5 +12,4 @@ public interface Command {
     void executed(boolean success, MessageReceivedEvent event);
     String help();
 
-
 }

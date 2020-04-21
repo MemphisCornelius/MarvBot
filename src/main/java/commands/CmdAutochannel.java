@@ -1,5 +1,6 @@
 package commands;
 
+import core.AutochannelHandler;
 import core.ServerSettingsHandler;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.JDA;
@@ -36,6 +37,8 @@ public class CmdAutochannel implements Command, Serializable {
     // Hier werden die Autochannels mit der dazugehörigen Guild registriert
     private static HashMap<VoiceChannel, Guild> autochans = new HashMap<>();
 
+    public static HashMap<String, String> autoChanName = new HashMap();
+
     // Getter für Autochannel register
     public static HashMap<VoiceChannel, Guild> getAutochans() {
         return autochans;
@@ -66,17 +69,19 @@ public class CmdAutochannel implements Command, Serializable {
         dann wird dieser dem hinzugefügt und in die Save File gespeichert.
     */
 
-    private void setChan(String id, Guild g, TextChannel tc) {
-        VoiceChannel vc = getVchan(id, g);
+    private void setChan(String vcid, Guild g, TextChannel tc) {
+        VoiceChannel vc = getVchan(vcid, g);
 
         if (vc == null) {
-            error(tc, String.format("Voice channel with the ID `%s` does not exist.", id));
+            error(tc, String.format("Voice channel with the ID `%s` does not exist.", vcid));
         } else if (autochans.containsKey(vc)) {
-            error(tc, "This channel is just set as an auto channel.");
+            error(tc, "This channel is already set as an auto channel.");
         } else {
             autochans.put(vc, g);
 
             msg(tc, String.format("Successfully set voice channel `%s` as auto channel.", vc.getName()));
+
+            CmdDVCbGIgnore.add(vcid, g.getId());
 
             String sql = "INSERT INTO autoChan VALUES (?, ?)";
 
@@ -90,6 +95,63 @@ public class CmdAutochannel implements Command, Serializable {
 
             } catch (SQLException e) {
                 e.printStackTrace();
+            }
+        }
+    }
+
+    private void setName(String vcid, Guild g, TextChannel tc, String name) {
+
+        VoiceChannel vc = getVchan(vcid, g);
+
+        if (vc == null || !autochans.containsKey(vc)) {
+            error(tc, String.format("Voice channel with the ID `%s` is not a autochannel.", vcid));
+        }else {
+            if(name.length() < 1 || name.length()> 95) {
+                error(tc, String.format("The name must be in range of 1 and 95!"));
+            }
+
+            autoChanName.put(vcid, name);
+
+            String sql = "UPDATE autoChan SET name = ? WHERE vcid = ? AND gid = ?";
+
+            try (Connection con = DriverManager.getConnection(url, usr, pw);
+                 PreparedStatement pst = con.prepareStatement(sql)) {
+
+                pst.setString(1, name);
+                pst.setString(2, vcid);
+                pst.setString(3, g.getId());
+                pst.executeUpdate();
+
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+
+            msg(tc, String.format("Successfully set auto channel name to `%s` of voice channel `%s` as auto channel.", name, vc.getName()));
+        }
+    }
+
+    private void unsetName(String vcid, Guild g, TextChannel tc) {
+
+        VoiceChannel vc = getVchan(vcid, g);
+
+        if (vc == null) {
+            error(tc, String.format("Voice channel with the ID `%s` does not exist.", vcid));
+        }else {
+
+            autoChanName.remove(vcid);
+            msg(tc, String.format("Successfully removed auto channel name of voice channel `%s` as auto channel.", vc.getName()));
+
+            String sql = "UPDATE autoChan SET name = NULL WHERE vcid = ? AND gid = ?";
+
+            try (Connection con = DriverManager.getConnection(url, usr, pw);
+                 PreparedStatement pst = con.prepareStatement(sql)) {
+
+                pst.setString(1, vcid);
+                pst.setString(2, g.getId());
+                pst.executeUpdate();
+
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
             }
         }
     }
@@ -109,6 +171,8 @@ public class CmdAutochannel implements Command, Serializable {
             autochans.remove(vc);
 
             msg(tc, String.format("Successfully unset auto channel state of `%s`.", vc.getName()));
+
+            CmdDVCbGIgnore.remove(id);
 
             String sql = "DELETE FROM autoChan WHERE vcid = ? AND gid = ?";
 
@@ -133,7 +197,9 @@ public class CmdAutochannel implements Command, Serializable {
     */
     public static void unsetChan(VoiceChannel vc) {
         autochans.remove(vc);
-        String sql = "DELETE * FROM autoChan WHERE vcid = ?";
+        CmdDVCbGIgnore.remove(vc.getId());
+
+        String sql = "DELETE FROM autoChan WHERE vcid = ?";
 
         try (Connection con = DriverManager.getConnection(url, usr, pw);
              PreparedStatement pst = con.prepareStatement(sql)) {
@@ -168,11 +234,19 @@ public class CmdAutochannel implements Command, Serializable {
         try (Connection con = DriverManager.getConnection(url, usr, pw);
              Statement st = con.createStatement()) {
 
-            ResultSet rs = st.executeQuery("SELECT  * FROM autoChan");
+            ResultSet rs = st.executeQuery("SELECT vcid, gid, name FROM autoChan");
 
             while (rs.next()) {
-                autochans.put(jda.getVoiceChannelById(rs.getString(1)),
-                        jda.getGuildById(rs.getString(2)));
+                String vcid = rs.getString(1);
+                String gid = rs.getString(2);
+                String name = rs.getString(3);
+                VoiceChannel vc = jda.getVoiceChannelById(vcid);
+
+                if (vc != null) {
+
+                autochans.put(vc, jda.getGuildById(gid));
+                autoChanName.put(vcid, name);
+            }
             }
 
         } catch (SQLException e) {
@@ -207,7 +281,6 @@ public class CmdAutochannel implements Command, Serializable {
                 case "show":
                     listChans(g, tc);
                     break;
-
                 case "add":
                 case "set":
                     // Nimmt "set"/"add" aus den Arguments und übergibt nur die VC ID als Argument.
@@ -215,6 +288,23 @@ public class CmdAutochannel implements Command, Serializable {
                         MessageMask.msg(tc, user, Color.RED, Config.ERROR_THUMBNAIL, help());
                     } else
                         setChan(args[1], g, tc);
+                    break;
+                case "name":
+                    if (args.length < 3) {
+                        MessageMask.msg(tc, user, Color.RED, Config.ERROR_THUMBNAIL, help());
+                    } else {
+
+                        String name = "";
+                        for (int i = 2; i < args.length; i ++) { name += args[i] + " ";}
+                        setName(args[1], g, tc, name.trim());
+                    }
+                    break;
+                case "unname":
+                    if (args.length < 2) {
+                        MessageMask.msg(tc, user, Color.RED, Config.ERROR_THUMBNAIL, help());
+                    } else {
+                        unsetName(args[1], g, tc);
+                    }
                     break;
 
                 case "remove":
@@ -246,9 +336,11 @@ public class CmdAutochannel implements Command, Serializable {
     @Override
     public String help() {
         return String.format("**USAGE:**\n" +
-                        ":white_small_square:  `%s%s set <Chan ID>`  -  Set voice chan as auto channel\n" +
-                        ":white_small_square:  `%s%s unset <Chan ID>`  -  Unset voice chan as auto chan\n" +
+                        ":white_small_square:  `%s%s set <Channel ID>`  -  Set voice chan as auto channel\n" +
+                        ":white_small_square:  `%s%s unset <Channel ID>`  -  Unset voice chan as auto chan\n" +
+                        ":white_small_square:  `%s%s name <Channel ID> <name>`  -  Set name of autochannel\n" +
+                        ":white_small_square:  `%s%s unname <Channel ID>`  -  Unset name of autochannel\n" +
                         ":white_small_square:  `%s%s list`  -  Display all registered auto chans\n",
-                Config.PREFIX, Config.CMD_AUTOCHAN, Config.PREFIX, Config.CMD_AUTOCHAN, Config.PREFIX, Config.CMD_AUTOCHAN);
+                Config.PREFIX, Config.CMD_AUTOCHAN, Config.PREFIX, Config.CMD_AUTOCHAN, Config.PREFIX, Config.CMD_AUTOCHAN, Config.PREFIX, Config.CMD_AUTOCHAN, Config.PREFIX, Config.CMD_AUTOCHAN);
     }
 }

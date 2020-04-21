@@ -4,9 +4,9 @@ import core.CommandHandler;
 import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.entities.User;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
-import util.Time;
 import util.Config;
 import util.MessageMask;
+import util.Time;
 
 import java.util.Map;
 import java.util.TreeMap;
@@ -40,27 +40,31 @@ public class CmdHelp implements Command {
                                     "**Usage:**\n" +
                                     ":white_small_square: `%s%s set <Chan ID>` - Set voice chan as auto channel\n" +
                                     ":white_small_square: `%s%s unset <Chan ID>` - Unset voice chan as auto chan\n" +
+                                    ":white_small_square:  `%s%s name <Channel ID> <name>`  -  Set name of autochannel\n" +
+                                    ":white_small_square:  `%s%s unname <Channel ID>`  -  Unset name of autochannel\n" +
                                     ":white_small_square: `%s%s list` - Display all registered auto chans\n",
-                            Config.PREFIX, Config.CMD_AUTOCHAN, Config.PREFIX, Config.CMD_AUTOCHAN, Config.PREFIX, Config.CMD_AUTOCHAN);
+                            Config.PREFIX, Config.CMD_AUTOCHAN, Config.PREFIX, Config.CMD_AUTOCHAN, Config.PREFIX, Config.CMD_AUTOCHAN, Config.PREFIX, Config.CMD_AUTOCHAN, Config.PREFIX, Config.CMD_AUTOCHAN);
                     break;
 
                 case Config.CMD_BATTLEOFDISCORDIA:
-                    helpMsg = String.format("Welcome to the game \"Battle of Discordia\"." +
-                                    " First, you have to register you a player account with which you will play this game." +
-                                    " This player will then spawn randomly within the 50 x 50 units large map." +
-                                    " There you can move one unit at once." +
-                                    " But you have to wait until your player has moved and this can take some time if you move on a poor ground." +
-                                    " Once moving your Player has been finished, there is a chance of finding a key which can open lootboxes." +
-                                    " In these lootboxes, which you can get every four hours, you will find weapons, shields and healing spells." +
-                                    " With these you can damage other players, block attacks or heal yourself (Tip: Do not try to heal yourself over 120hp, it will not work). " +
-                                    "But watch out you can use any item only once! " +
-                                    "To be able to attack another player, you have to be standing within a one-unit range of him. " +
-                                    "So, you have to move and find other players to attack. " +
-                                    "If you attack another player, he will automatically equip his best shield to block your attack. " +
-                                    "For each hit you will receive the same amount of points as you did damage. " +
-                                    "If you kill a player he will lose a third of his inventory, lose all his points and you will get 20 points extra. " +
-                                    "But remember you can only attack every two hours." +
-                                    "\n\n**USAGE:**" +
+                    helpMsg = String.format("Welcome to the game \"Battle of Discordia\". " +
+                            "First, you have to register you a player account with which you will play this game. " +
+                            "This player will then spawn randomly within the 50 x 50 units large map. " +
+                            "There you can move one unit at once. " +
+                            "But you have to wait until your player has moved and this can take some time if you move on a poor ground. " +
+                            "Once moving your Player has been finished, there is a chance of finding a key which can open lootboxes. " +
+                            "In these lootboxes, which you can get every four hours, you will find weapons, shields and healing spells. " +
+                            "With these you can damage other players, block attacks or heal yourself (Tip: Do not try to heal yourself over 120hp, it will not work). " +
+                            "But watch out you can use any item only once! " +
+                            "To be able to attack another player, you have to be standing within a one-unit range of him. " +
+                            "So, you have to move and find other players to attack. " +
+                            "If you attack another player, he will automatically equip his best shield to block your attack. " +
+                            "For each hit you will receive the same amount of points as you did damage. " +
+                            "If you kill a player he will lose a third of his inventory, lose all his points and you will get 20 points extra. " +
+                            "But remember you can only attack every two hours.");
+                    MessageMask.help(tc, user, helpMsg);
+
+                    helpMsg = String.format("**USAGE:**" +
                                     "\n:white_small_square: `%s%s register <playername>` - Register yourself for this game." +
                                     "\n:white_small_square: `%s%s delete` - Delete your registered account." +
                                     "\n:white_small_square: `%s%s rename <playername>` - Rename your account if you are unhappy with your current one." +
@@ -84,10 +88,10 @@ public class CmdHelp implements Command {
 
                 case Config.CMD_AUTOROLE:
                     helpMsg = String.format("Setup autoroles\n\n" +
-                            "**Usage:**\n" +
-                            ":white_small_square: `%s%s set <Role>` - Set role as autorole.\n" +
-                            ":white_small_square: `%s%s unset <Role>` - Unset role as autorole.\n" +
-                            ":white_small_square: `%s%s list` - Display all registered autoroles.",
+                                    "**Usage:**\n" +
+                                    ":white_small_square: `%s%s set <Role>` - Set role as autorole.\n" +
+                                    ":white_small_square: `%s%s unset <Role>` - Unset role as autorole.\n" +
+                                    ":white_small_square: `%s%s list` - Display all registered autoroles.",
                             Config.PREFIX, Config.CMD_AUTOROLE, Config.PREFIX, Config.CMD_AUTOROLE, Config.PREFIX, Config.CMD_AUTOROLE);
                     break;
 

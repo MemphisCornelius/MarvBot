@@ -20,7 +20,7 @@ public class CmdDVCbGIgnore implements Command {
     private static String usr = ServerSettingsHandler.getDBUS();
     private static String pw = ServerSettingsHandler.getDBPW();
 
-    private static void add(String vcid, String gid ) {
+    static void add(String vcid, String gid ) {
 
         String sql = "INSERT INTO dvcbgignore VALUES (?, ?)";
 
@@ -36,7 +36,7 @@ public class CmdDVCbGIgnore implements Command {
         }
     }
 
-    private static void remove(String id) {
+    static void remove(String id) {
 
         String sql = "DELETE FROM dvcbgignore WHERE vcid = ?";
 

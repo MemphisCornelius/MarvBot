@@ -45,6 +45,7 @@ public class Config {
     public static final String CMD_initializeDVCbG = "dvcbg_initialize";
     public static final String CMD_DVCBGIGNORE = "dvcbg_ignore";
     public static final String CMD_BATTLEOFDISCORDIA = "bod";
+    public static final String CMD_GUILDSTREAM = "gs";
 
     //UTILS
     public static final String ERROR_THUMBNAIL = "https://vignette.wikia.nocookie.net/timmypedia/images/1/1f/Red-X-in-circle.png/revision/latest?cb=20160924072833";

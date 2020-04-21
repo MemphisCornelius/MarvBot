@@ -94,6 +94,7 @@ public class DataBase {
         String autochanTable = "CREATE TABLE IF NOT EXISTS autoChan" +
                 "(vcid VARCHAR(18)," +
                 " gid VARCHAR(18)," +
+                " name VARCHAR(95)," +
                 " PRIMARY KEY (vcid))";
 
         try {

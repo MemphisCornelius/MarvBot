@@ -166,7 +166,7 @@ public class DVCbGHandler extends ListenerAdapter {
             memberIDs.add(m.getUser().getId());
         }
 
-        if ((memberIDs.size() == 2) &&memberIDs.contains(Config.OWNERID) && memberIDs.contains(Config.ARTURID)) { //#martur
+        if ((memberIDs.size() == 2) && memberIDs.contains(Config.OWNERID) && memberIDs.contains(Config.ARTURID)) { //#martur
             vc.getManager().setName("#martur").queue();
         }else if (!getMostGame(vc).isEmpty() //checks if there is a most played game
                 && !CmdDVCbGIgnore.getDVCbGIgnore().contains(vc.getId()) //checks if this vc is is not ignored
@@ -178,7 +178,8 @@ public class DVCbGHandler extends ListenerAdapter {
     }
 
     private static void setNameToDefault(VoiceChannel vc) {
-        vc.getManager().setName(getName(vc.getId())).queue();
+        if (!CmdDVCbGIgnore.getDVCbGIgnore().contains(vc.getId()))
+            vc.getManager().setName(getName(vc.getId())).queue();
     }
 
     @Override

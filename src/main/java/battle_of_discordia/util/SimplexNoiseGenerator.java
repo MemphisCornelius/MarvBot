@@ -1,8 +1,5 @@
 package battle_of_discordia.util;
 
-import battle_of_discordia.util.SimplexNoise;
-import battle_of_discordia.util.WorldGenerator;
-
 import java.util.Random;
 
 public class SimplexNoiseGenerator implements WorldGenerator {
@@ -58,5 +55,4 @@ public class SimplexNoiseGenerator implements WorldGenerator {
         }
         return totalNoise;
     }
-
 }

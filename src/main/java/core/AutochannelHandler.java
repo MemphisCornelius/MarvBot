@@ -1,5 +1,6 @@
 package core;
 
+import commands.CmdAutochannel;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.VoiceChannel;
 import net.dv8tion.jda.core.events.channel.voice.VoiceChannelDeleteEvent;
@@ -37,9 +38,21 @@ public class AutochannelHandler extends ListenerAdapter {
         Guild g = event.getGuild();
 
         if (autochans.containsKey(vc)) {
-            vc.createCopy().queue((nvc -> {
 
-                nvc.getManager().setName(vc.getName() + " [AC]").queue();
+            String name;
+            if (!CmdAutochannel.autoChanName.containsKey(vc.getId()) || CmdAutochannel.autoChanName.get(vc.getId()) == null) {
+               name = (vc.getName() + " [AC]");
+            }else {
+                name = (CmdAutochannel.autoChanName.get(vc.getId())+ " [AC]");
+            }
+
+            vc.createCopy().setName(name).queue((nvc -> {
+
+                if (!CmdAutochannel.autoChanName.containsKey(vc.getId()) || CmdAutochannel.autoChanName.get(vc.getId()) == null) {
+                    nvc.getManager().setName(vc.getName() + " [AC]").queue();
+                }else {
+                    nvc.getManager().setName(CmdAutochannel.autoChanName.get(vc.getId())+ " [AC]").queue();
+                }
 
                 g.getController().modifyVoiceChannelPositions().selectPosition((VoiceChannel) nvc).moveTo(vc.getPosition() + 1).queue();
                 g.getController().moveVoiceMember(event.getMember(), (VoiceChannel) nvc).queue();
@@ -78,10 +91,16 @@ public class AutochannelHandler extends ListenerAdapter {
         VoiceChannel vc = event.getChannelJoined();
 
         if (autochans.containsKey(vc)) {
-            VoiceChannel finalVc = vc;
-            vc.createCopy().queue((nvc -> {
 
-                nvc.getManager().setName(finalVc.getName() + " [AC]").queue();
+            String name;
+            if (!CmdAutochannel.autoChanName.containsKey(vc.getId()) || CmdAutochannel.autoChanName.get(vc.getId()) == null) {
+                name = (vc.getName() + " [AC]");
+            }else {
+                name = (CmdAutochannel.autoChanName.get(vc.getId())+ " [AC]");
+            }
+
+            VoiceChannel finalVc = vc;
+            vc.createCopy().setName(name).queue((nvc -> {
 
                 g.getController().modifyVoiceChannelPositions().selectPosition((VoiceChannel) nvc).moveTo(finalVc.getPosition() + 1).queue();
                 g.getController().moveVoiceMember(event.getMember(), (VoiceChannel) nvc).queue();
@@ -102,12 +121,11 @@ public class AutochannelHandler extends ListenerAdapter {
         nach dem Löschen der Autochannel aus dem Register entfernt und dieses
         gespeichert in der Save File.
     */
+    @Override
     public void onVoiceChannelDelete(VoiceChannelDeleteEvent event) {
         HashMap<VoiceChannel, Guild> autochans = commands.CmdAutochannel.getAutochans();
         if (autochans.containsKey(event.getChannel())) {
             commands.CmdAutochannel.unsetChan(event.getChannel());
         }
-
     }
-
 }

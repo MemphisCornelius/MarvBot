@@ -1,5 +1,6 @@
 package listeners;
 
+import net.dv8tion.jda.core.events.Event;
 import net.dv8tion.jda.core.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.core.events.guild.GuildLeaveEvent;
 import net.dv8tion.jda.core.events.guild.member.GuildMemberJoinEvent;
@@ -95,6 +96,7 @@ public class LogListener extends ListenerAdapter {
     public void onGuildMemberLeave(GuildMemberLeaveEvent event) {
 
         try {
+
             MessageMask.msg(event.getGuild().getTextChannelsByName(Config.CHANNEL_LOG_LISTENER,
                     true).get(0),
                     event.getMember().getUser(),
@@ -104,5 +106,9 @@ public class LogListener extends ListenerAdapter {
             event.getGuild().getController().createTextChannel(Config.CHANNEL_LOG_LISTENER).setTopic("This is the log-channel for the <@388355915583324160>.").
                     queue();
         }
+    }
+
+    private void checkLogChaennel(Event event) {
+
     }
 }

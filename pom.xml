@@ -50,7 +50,6 @@
             <artifactId>github-api</artifactId>
             <version>1.93</version>
         </dependency>
-
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
