@@ -470,7 +470,7 @@ public class CmdBattleOfDiscordia implements Command {
                             boolean allowedAttacking = false;
                             Duration dur = Duration.ofDays(999999);
 
-                            String sql = "SELECT datetimes FROM  resets WHERE pid = ? AND reset = 'attack'";
+                            String sql = "SELECT datetimes FROM resets WHERE pid = ? AND reset = 'attack'";
                             String insert = "INSERT INTO resets(reset, pid) VALUES ('attack', ?)";
 
                             try (Connection con = DriverManager.getConnection(url, usr, pw);
@@ -481,8 +481,13 @@ public class CmdBattleOfDiscordia implements Command {
                                 ResultSet rs = pst0.executeQuery();
 
                                 if (rs.next()) {
-                                    dur = Duration.between(LocalDateTime.parse(rs.getString(1), Config.formatter), LocalDateTime.now());
-                                    allowedAttacking = (dur.toMillis() >= 0);
+                                    if  (rs.getString(1) != null){
+                                        dur = Duration.between(LocalDateTime.parse(rs.getString(1), Config.formatter), LocalDateTime.now());
+                                        allowedAttacking = (dur.toMillis() >= 0);
+                                    }else {
+                                        allowedAttacking = true;
+                                    }
+
                                 } else {
                                     pst1.setString(1, p.getId());
                                     pst1.executeUpdate();

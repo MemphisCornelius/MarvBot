@@ -169,6 +169,9 @@ public class ReactionListener extends ListenerAdapter {
                              PreparedStatement pst = con.prepareStatement(update)) {
 
                             pst.setString(1, LocalDateTime.now().plusMinutes(120).format(Config.formatter));
+                            pst.setString(2, p.getId());
+
+                            pst.executeUpdate();
 
                         } catch (SQLException e) {
                             e.printStackTrace();
