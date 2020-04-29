@@ -33,10 +33,10 @@ public class DataBase {
                 " datetime VARCHAR(23)," +
                 " PRIMARY KEY (uid))";
 
-        String autoRolesTable = "CREATE TABLE IF NOT EXISTS autoroles" +
-                "(rid VARCHAR(18) NOT NULL," +
-                " gid VARCHAR(18)," +
-                " PRIMARY KEY (rid))";
+        //String autoRolesTable = "CREATE TABLE IF NOT EXISTS autoroles" +
+        //        "(rid VARCHAR(18) NOT NULL," +
+        //        " gid VARCHAR(18)," +
+        //        " PRIMARY KEY (rid))";
 
         String vcNameTable = "CREATE TABLE IF NOT EXISTS vcnames" +
                 "(vcid VARCHAR(18) NOT NULL," +
@@ -97,6 +97,12 @@ public class DataBase {
                 " name VARCHAR(95)," +
                 " PRIMARY KEY (vcid))";
 
+        String setTable = "CREATE TABLE IF NOT EXISTS configTable" +
+                "(gid VARCHAR(18)," +
+                " type VARCHAR(32)," +
+                " value VARCHAR(18)," +
+                " PRIMARY KEY (gid, type))";
+
         try {
 
             Connection conn = DriverManager.getConnection(url, usr, pw);
@@ -104,7 +110,7 @@ public class DataBase {
 
             stmt.addBatch(lootboxesTable);
             stmt.addBatch(userTimeTable);
-            stmt.addBatch(autoRolesTable);
+            //stmt.addBatch(autoRolesTable);
             stmt.addBatch(vcNameTable);
             stmt.addBatch(dvcbgIgnoreTable);
             stmt.addBatch(playerTable);
@@ -113,6 +119,7 @@ public class DataBase {
             stmt.addBatch(mapTable);
             stmt.addBatch(resetsTable);
             stmt.addBatch(autochanTable);
+            stmt.addBatch(setTable);
             stmt.addBatch("INSERT IGNORE INTO player VALUES (0, NULL, NULL, NULL, NULL, NULL )");
 
             stmt.executeBatch();
@@ -145,7 +152,7 @@ public class DataBase {
 
                             st.addBatch("INSERT IGNORE INTO map(x, y) "
                                     + "VALUES(" + x + ", " + y + ")");
-
+                            
                         }
                     }
 
