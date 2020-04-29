@@ -107,8 +107,4 @@ public class LogListener extends ListenerAdapter {
                     queue();
         }
     }
-
-    private void checkLogChaennel(Event event) {
-
-    }
 }

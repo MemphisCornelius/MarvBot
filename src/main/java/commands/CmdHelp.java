@@ -46,6 +46,11 @@ public class CmdHelp implements Command {
                             Config.PREFIX, Config.CMD_AUTOCHAN, Config.PREFIX, Config.CMD_AUTOCHAN, Config.PREFIX, Config.CMD_AUTOCHAN, Config.PREFIX, Config.CMD_AUTOCHAN, Config.PREFIX, Config.CMD_AUTOCHAN);
                     break;
 
+                case Config.CMD_BAN:
+                    String.format("Ban a user.\n\n" +
+                            "***USAGE***" +
+                            "\n:white_small_square: `%s%s <user> <reason>` - Bans the user from the server", Config.PREFIX, Config.CMD_BAN);
+
                 case Config.CMD_BATTLEOFDISCORDIA:
                     helpMsg = String.format("Welcome to the game \"Battle of Discordia\". " +
                             "First, you have to register you a player account with which you will play this game. " +
@@ -71,7 +76,7 @@ public class CmdHelp implements Command {
                                     "\n:white_small_square: `%s%s move` - Shows you the map and gives you the opportunity to move." +
                                     "\n:white_small_square: `%s%s information` - See all the stats of your player." +
                                     "\n:white_small_square: `%s%s inventory` - Opens your inventory." +
-                                    "\n:white_small_square: `%s%s attack <itemID>` - Gives you the opportunity to attack a nearby player with the selected item.`" +
+                                    "\n:white_small_square: `%s%s attack <itemID>` - Gives you the opportunity to attack a nearby player with the selected item." +
                                     "\n:white_small_square: `%s%s use <itemID>` - Use the selected item to heal you." +
                                     "\n:white_small_square: `%s%s leaderboard` - Shows you the leaderboard." +
                                     "\n:white_small_square: `%s%s lootbox` - Get a lootbox." +
@@ -135,6 +140,12 @@ public class CmdHelp implements Command {
                             "**Usage**:\n :white_small_square: `%s%s`", Config.PREFIX, Config.CMD_HELP);
                     break;
 
+                case Config.CMD_KICK:
+                    helpMsg = String.format("Kick a user\n\n" +
+                            "***USAGE***" +
+                            "\n:white_small_square: `%s%s <user> <reason>` - Kicks the member from the server.", Config.PREFIX, Config.CMD_KICK);
+                    break;
+
                 case Config.CMD_PING:
                     helpMsg = String.format("Shows the ping from this bot.\n\n" +
                             "**Usage**:\n :white_small_square: `%s%s`", Config.PREFIX, Config.CMD_PING);
@@ -143,6 +154,17 @@ public class CmdHelp implements Command {
                 case Config.CMD_POKE:
                     helpMsg = String.format("Send a user a private message over the bot. (Like poking somebody on Teamspeak)\n\n" +
                             "**Usage**:\n :white_small_square: `%s%s` <User> <Message>", Config.PREFIX, Config.CMD_POKE);
+                    break;
+
+                case Config.CMD_SET:
+                    helpMsg = String.format("***USAGE***\n" +
+                                    ":white_small_square: `%s%s verify <role>` - Set verify role.\n" +
+                                    ":white_small_square: `%s%s moderation <role>` - Set moderation role.\n" +
+                                    ":white_small_square: `%s%s modlog <textChanneliId>` - Set modlog channel.\n" +
+                                    ":white_small_square: `%s%s autorole <role>` - Set autorole.\n" +
+                                    ":white_small_square: `%s%s list` - List all configs.\n" +
+                                    ":white_small_square: `%s%s remove <type>` - Removes the config setting.",
+                            Config.PREFIX, Config.CMD_SET, Config.PREFIX, Config.CMD_SET, Config.PREFIX, Config.CMD_SET, Config.PREFIX, Config.CMD_SET, Config.PREFIX, Config.CMD_SET, Config.PREFIX, Config.CMD_SET);
                     break;
 
                 case Config.CMD_SHUTDOWN:
@@ -169,11 +191,13 @@ public class CmdHelp implements Command {
             Map<String, Command> commandsSorted = new TreeMap<>(CommandHandler.commands);
 
             for (String key : commandsSorted.keySet()) {
-                COMMANDS.append(":white_small_square:").append(key).append("\n");
+                COMMANDS.append(":white_small_square: ").append(key).append("\n");
             }
 
+            String com = COMMANDS.toString().replace(":white_small_square: " + Config.CMD_VERIFY + "\n", "");
+
             MessageMask.help(tc, user,
-                    "[Click here to invite the bot to your server]", Config.INVITELINK, "\n**Commands:**\n" + COMMANDS.toString() + "\nType `help <command>` to get more Information.");
+                    "[Click here to invite the bot to your server]", Config.INVITELINK, "\n**Commands:**\n" + com + "\nType `help <command>` to get more Information.");
 
         }
 

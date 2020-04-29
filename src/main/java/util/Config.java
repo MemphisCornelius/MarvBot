@@ -33,8 +33,6 @@ public class Config {
     public static final String CMD_POKE = "poke";
     public static final String CMD_HELP = "help";
     public static final String CMD_AUTOCHAN = "autochan";
-    public static final String CMD_ZNAKE = "znake";
-    public static final String CMD_TEST = "test";
     public static final String CMD_ABOUT = "about";
     public static final String CMD_BUGREPORT = "bugreport";
     public static final String CMD_DEBUG = "debug";
@@ -45,7 +43,12 @@ public class Config {
     public static final String CMD_initializeDVCbG = "dvcbg_initialize";
     public static final String CMD_DVCBGIGNORE = "dvcbg_ignore";
     public static final String CMD_BATTLEOFDISCORDIA = "bod";
-    public static final String CMD_GUILDSTREAM = "gs";
+    public static final String CMD_BAN = "ban";
+    public static final String CMD_KICK = "kick";
+    public static final String CMD_SET = "set";
+    public static final String CMD_VERIFY = "verify";
+
+
 
     //UTILS
     public static final String ERROR_THUMBNAIL = "https://vignette.wikia.nocookie.net/timmypedia/images/1/1f/Red-X-in-circle.png/revision/latest?cb=20160924072833";

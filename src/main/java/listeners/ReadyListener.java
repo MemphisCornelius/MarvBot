@@ -23,6 +23,7 @@ public class ReadyListener extends ListenerAdapter {
         folder.mkdir();
 
         commands.CmdAutochannel.load(event.getJDA());
+        commands.CmdSet.load();
         DataBase.createDbTables();
         DataBase.mapInsert();
         DataBase.itemInsert();
