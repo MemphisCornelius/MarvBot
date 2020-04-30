@@ -1,9 +1,10 @@
 package commands;
 
-import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.entities.TextChannel;
-import net.dv8tion.jda.core.entities.User;
-import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import util.Config;
 import util.MessageMask;
 import util.Time;
@@ -57,7 +58,7 @@ public class CmdPoke implements Command {
             }, 500);
 
 
-            net.dv8tion.jda.core.entities.Message msg = event.getTextChannel().sendMessage(
+            Message msg = event.getTextChannel().sendMessage(
                     done.build()
             ).complete();
 

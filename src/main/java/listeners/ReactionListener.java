@@ -6,13 +6,13 @@ import battle_of_discordia.Player;
 import battle_of_discordia.util.Direction;
 import commands.CmdBattleOfDiscordia;
 import core.ServerSettingsHandler;
-import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.MessageBuilder;
-import net.dv8tion.jda.core.entities.MessageChannel;
-import net.dv8tion.jda.core.entities.MessageEmbed;
-import net.dv8tion.jda.core.entities.User;
-import net.dv8tion.jda.core.events.message.guild.react.GuildMessageReactionAddEvent;
-import net.dv8tion.jda.core.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.MessageBuilder;
+import net.dv8tion.jda.api.entities.MessageChannel;
+import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import util.ColorByRarity;
 import util.Config;
 import util.MessageMask;
@@ -35,7 +35,7 @@ public class ReactionListener extends ListenerAdapter {
 
     private void editEmbed(GuildMessageReactionAddEvent event, Color color, String description) {
 
-        event.getChannel().getMessageById(event.getMessageIdLong()).queue(message -> {
+        event.getChannel().retrieveMessageById(event.getMessageIdLong()).queue(message -> {
             message.clearReactions().queue();
             MessageEmbed oldEmbed = message.getEmbeds().get(0);
             EmbedBuilder embed = new EmbedBuilder().setColor(color).
@@ -144,7 +144,7 @@ public class ReactionListener extends ListenerAdapter {
                             break;
                         case "❌":
                             CmdBattleOfDiscordia.attackReactionMessage.remove(event.getMessageId());
-                            event.getChannel().getMessageById(event.getMessageIdLong()).queue(message ->
+                            event.getChannel().retrieveMessageById(event.getMessageIdLong()).queue(message ->
                                     message.clearReactions().queue());
                             break;
                     }
@@ -160,7 +160,7 @@ public class ReactionListener extends ListenerAdapter {
                                         " and healed yourself with " + (p.getHp() - beforeP) + "hp.");
 
                         CmdBattleOfDiscordia.attackReactionMessage.remove(event.getMessageId());
-                        event.getChannel().getMessageById(event.getMessageIdLong()).queue(message ->
+                        event.getChannel().retrieveMessageById(event.getMessageIdLong()).queue(message ->
                                 message.clearReactions().queue());
 
                         String update = "UPDATE resets SET datetimes = ? WHERE pid = ? AND reset = 'attack'";
@@ -201,7 +201,7 @@ public class ReactionListener extends ListenerAdapter {
                             break;
                         case "❌":
                             CmdBattleOfDiscordia.moveReactionMessage.remove(event.getMessageId());
-                            event.getChannel().getMessageById(event.getMessageIdLong()).queue(message ->
+                            event.getChannel().retrieveMessageById(event.getMessageIdLong()).queue(message ->
                                     message.clearReactions().queue());
                             break;
                     }
@@ -234,7 +234,7 @@ public class ReactionListener extends ListenerAdapter {
                                     .setFooter("Requested by @" + user.getName(), user.getEffectiveAvatarUrl());
                             message.setEmbed(embed.build());
 
-                            event.getChannel().getMessageById(event.getMessageIdLong()).queue(msg ->
+                            event.getChannel().retrieveMessageById(event.getMessageIdLong()).queue(msg ->
                                     msg.delete().queue()
                             );
 

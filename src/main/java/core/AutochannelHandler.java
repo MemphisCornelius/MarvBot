@@ -1,13 +1,13 @@
 package core;
 
 import commands.CmdAutochannel;
-import net.dv8tion.jda.core.entities.Guild;
-import net.dv8tion.jda.core.entities.VoiceChannel;
-import net.dv8tion.jda.core.events.channel.voice.VoiceChannelDeleteEvent;
-import net.dv8tion.jda.core.events.guild.voice.GuildVoiceJoinEvent;
-import net.dv8tion.jda.core.events.guild.voice.GuildVoiceLeaveEvent;
-import net.dv8tion.jda.core.events.guild.voice.GuildVoiceMoveEvent;
-import net.dv8tion.jda.core.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.VoiceChannel;
+import net.dv8tion.jda.api.events.channel.voice.VoiceChannelDeleteEvent;
+import net.dv8tion.jda.api.events.guild.voice.GuildVoiceJoinEvent;
+import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
+import net.dv8tion.jda.api.events.guild.voice.GuildVoiceMoveEvent;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -54,8 +54,8 @@ public class AutochannelHandler extends ListenerAdapter {
                     nvc.getManager().setName(CmdAutochannel.autoChanName.get(vc.getId())+ " [AC]").queue();
                 }
 
-                g.getController().modifyVoiceChannelPositions().selectPosition((VoiceChannel) nvc).moveTo(vc.getPosition() + 1).queue();
-                g.getController().moveVoiceMember(event.getMember(), (VoiceChannel) nvc).queue();
+                g.modifyVoiceChannelPositions().selectPosition((VoiceChannel) nvc).moveTo(vc.getPosition() + 1).queue();
+                g.moveVoiceMember(event.getMember(), (VoiceChannel) nvc).queue();
                 active.add((VoiceChannel) nvc);
             }));
         }
@@ -102,8 +102,8 @@ public class AutochannelHandler extends ListenerAdapter {
             VoiceChannel finalVc = vc;
             vc.createCopy().setName(name).queue((nvc -> {
 
-                g.getController().modifyVoiceChannelPositions().selectPosition((VoiceChannel) nvc).moveTo(finalVc.getPosition() + 1).queue();
-                g.getController().moveVoiceMember(event.getMember(), (VoiceChannel) nvc).queue();
+                g.modifyVoiceChannelPositions().selectPosition((VoiceChannel) nvc).moveTo(finalVc.getPosition() + 1).queue();
+                g.moveVoiceMember(event.getMember(), (VoiceChannel) nvc).queue();
                 active.add((VoiceChannel) nvc);
             }));
         }

@@ -1,6 +1,6 @@
 package commands;
 
-import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import util.Config;
 import util.MessageMask;
 import util.Time;
@@ -29,7 +29,7 @@ public class CmdPing implements Command {
     @Override
     public boolean action(String[] args, MessageReceivedEvent event) {
 
-        long ping = event.getJDA().getPing();
+        long ping = event.getJDA().getGatewayPing();
 
         MessageMask.msg(event.getTextChannel(), event.getAuthor(), getColorByPing(ping), String.format(":ping_pong:   **Pong!**\n\nThe ping is `%s` ms.",
                 ping));

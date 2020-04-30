@@ -5,10 +5,9 @@ import listeners.LogListener;
 import listeners.MessageListener;
 import listeners.ReactionListener;
 import listeners.ReadyListener;
-import net.dv8tion.jda.core.AccountType;
-import net.dv8tion.jda.core.JDABuilder;
-import net.dv8tion.jda.core.OnlineStatus;
-import net.dv8tion.jda.core.entities.Game;
+import net.dv8tion.jda.api.AccountType;
+import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.entities.Activity;
 import util.Config;
 
 import javax.security.auth.login.LoginException;
@@ -25,8 +24,7 @@ public class Main {
 
         builder.setToken(ServerSettingsHandler.getToken());
         builder.setAutoReconnect(true);
-        builder.setStatus(OnlineStatus.ONLINE);
-        builder.setGame(Game.of(Game.GameType.LISTENING, Config.GAME));
+        builder.setActivity(Activity.of(Activity.ActivityType.LISTENING, Config.GAME));
 
         addListeners();
         addCommands();
@@ -40,13 +38,13 @@ public class Main {
 
     //LISTENERS
     private static void addListeners() {
-        builder.addEventListener(new ReadyListener());
-        builder.addEventListener(new MessageListener());
-        builder.addEventListener(new AutoroleHandler());
-        builder.addEventListener(new DVCbGHandler());
-        builder.addEventListener(new AutochannelHandler());
-        builder.addEventListener(new ReactionListener());
-        builder.addEventListener(new LogListener());
+        builder.addEventListeners(new ReadyListener());
+        builder.addEventListeners(new MessageListener());
+        builder.addEventListeners(new AutoroleHandler());
+        builder.addEventListeners(new DVCbGHandler());
+        builder.addEventListeners(new AutochannelHandler());
+        builder.addEventListeners(new ReactionListener());
+        builder.addEventListeners(new LogListener());
     }
 
     //COMMANDS

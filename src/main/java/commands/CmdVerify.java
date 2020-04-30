@@ -1,6 +1,6 @@
 package commands;
 
-import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import util.Config;
 import util.Time;
 
@@ -16,7 +16,7 @@ public class CmdVerify implements Command {
 
     @Override
     public boolean action(String[] args, MessageReceivedEvent event) throws ParseException, IOException {
-        event.getGuild().getController().addRolesToMember(
+        event.getGuild().modifyMemberRoles(
                 event.getMember(), event.getGuild().getRoleById(CmdSet.configList.get(event.getGuild().getId()).get("verify"))).queue();
         event.getMessage().delete().queueAfter(5, TimeUnit.SECONDS);
 

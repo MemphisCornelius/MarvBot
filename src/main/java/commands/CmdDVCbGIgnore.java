@@ -1,8 +1,8 @@
 package commands;
 
 import core.ServerSettingsHandler;
-import net.dv8tion.jda.core.Permission;
-import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import util.Config;
 import util.MessageMask;
 import util.Time;

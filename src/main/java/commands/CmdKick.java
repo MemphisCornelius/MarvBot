@@ -1,11 +1,11 @@
 package commands;
 
-import net.dv8tion.jda.core.Permission;
-import net.dv8tion.jda.core.entities.Member;
-import net.dv8tion.jda.core.entities.TextChannel;
-import net.dv8tion.jda.core.entities.User;
-import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.core.exceptions.HierarchyException;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.exceptions.HierarchyException;
 import util.Config;
 import util.MessageMask;
 import util.Time;
@@ -43,7 +43,7 @@ public class CmdKick implements Command {
 
                 if (!finalContent.isEmpty()) {
 
-                    event.getGuild().getController().kick(kick, content).queue();
+                    event.getGuild().kick(kick, content).queue();
 
                     try {
                         MessageMask.log((CmdSet.configList.containsKey(event.getGuild().getId()) && CmdSet.configList.get(event.getGuild().getId()).containsKey("modlog") ?
@@ -52,7 +52,7 @@ public class CmdKick implements Command {
                                 kick.getUser(), Color.WHITE, "by " + user.getName(),
                                 "was kicked for \n ```" + content + "```");
                     } catch (IndexOutOfBoundsException e) {
-                        event.getGuild().getController().createTextChannel(Config.CHANNEL_LOG_LISTENER).setTopic("This is the log-channel for the <@388355915583324160>.").
+                        event.getGuild().createTextChannel(Config.CHANNEL_LOG_LISTENER).setTopic("This is the log-channel for the <@388355915583324160>.").
                                 queue();
                     }
 

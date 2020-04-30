@@ -1,19 +1,15 @@
 package commands;
 
-import core.Main;
-import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.entities.TextChannel;
-import net.dv8tion.jda.core.entities.User;
-import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
-import org.kohsuke.github.GHEventPayload;
-import org.kohsuke.github.GHIssueBuilder;
-import org.kohsuke.github.GHRepository;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import util.Config;
 import util.MessageMask;
 import util.Time;
 
 import java.awt.*;
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.OffsetDateTime;
@@ -114,7 +110,7 @@ public class CmdBugreport implements Command {
                 }, 500);
 
 
-                net.dv8tion.jda.core.entities.Message msg = event.getTextChannel().sendMessage(
+                Message msg = event.getTextChannel().sendMessage(
                         done.build()
                 ).complete();
 

@@ -1,14 +1,14 @@
 package listeners;
 
-import net.dv8tion.jda.core.events.Event;
-import net.dv8tion.jda.core.events.guild.GuildJoinEvent;
-import net.dv8tion.jda.core.events.guild.GuildLeaveEvent;
-import net.dv8tion.jda.core.events.guild.member.GuildMemberJoinEvent;
-import net.dv8tion.jda.core.events.guild.member.GuildMemberLeaveEvent;
-import net.dv8tion.jda.core.events.guild.voice.GuildVoiceJoinEvent;
-import net.dv8tion.jda.core.events.guild.voice.GuildVoiceLeaveEvent;
-import net.dv8tion.jda.core.events.guild.voice.GuildVoiceMoveEvent;
-import net.dv8tion.jda.core.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.events.Event;
+import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
+import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
+import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
+import net.dv8tion.jda.api.events.guild.member.GuildMemberLeaveEvent;
+import net.dv8tion.jda.api.events.guild.voice.GuildVoiceJoinEvent;
+import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
+import net.dv8tion.jda.api.events.guild.voice.GuildVoiceMoveEvent;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import util.Config;
 import util.MessageMask;
 
@@ -19,7 +19,7 @@ public class LogListener extends ListenerAdapter {
     @Override
     public void onGuildJoin(GuildJoinEvent event) {
 
-        event.getGuild().getController().createTextChannel(Config.CHANNEL_LOG_LISTENER).setTopic("This is the log-channel for the <@388355915583324160>.").
+        event.getGuild().createTextChannel(Config.CHANNEL_LOG_LISTENER).setTopic("This is the log-channel for the <@388355915583324160>.").
                 queue();
 
     }
@@ -42,7 +42,7 @@ public class LogListener extends ListenerAdapter {
                     "VCID: " + event.getChannelJoined().getId(),
                     "joined #" + event.getChannelJoined().getName());
         } catch (IndexOutOfBoundsException e) {
-            event.getGuild().getController().createTextChannel(Config.CHANNEL_LOG_LISTENER).setTopic("This is the log-channel for the <@388355915583324160>.").
+            event.getGuild().createTextChannel(Config.CHANNEL_LOG_LISTENER).setTopic("This is the log-channel for the <@388355915583324160>.").
                     queue();
         }
     }
@@ -57,7 +57,7 @@ public class LogListener extends ListenerAdapter {
                     "VCID: " + event.getChannelJoined().getId(),
                     "moved from #" + event.getChannelLeft().getName() + " to #" + event.getChannelJoined().getName());
         } catch (IndexOutOfBoundsException e) {
-            event.getGuild().getController().createTextChannel(Config.CHANNEL_LOG_LISTENER).setTopic("This is the log-channel for the <@388355915583324160>.").
+            event.getGuild().createTextChannel(Config.CHANNEL_LOG_LISTENER).setTopic("This is the log-channel for the <@388355915583324160>.").
                     queue();
         }
     }
@@ -72,7 +72,7 @@ public class LogListener extends ListenerAdapter {
                     "VCID: " + event.getChannelLeft().getId(),
                     "left #" + event.getChannelLeft().getName());
         } catch (IndexOutOfBoundsException e) {
-            event.getGuild().getController().createTextChannel(Config.CHANNEL_LOG_LISTENER).setTopic("This is the log-channel for the <@388355915583324160>.").
+            event.getGuild().createTextChannel(Config.CHANNEL_LOG_LISTENER).setTopic("This is the log-channel for the <@388355915583324160>.").
                     queue();
         }
     }
@@ -87,7 +87,7 @@ public class LogListener extends ListenerAdapter {
                     new Color(20, 90, 10),
                     "joined the guild");
         } catch (IndexOutOfBoundsException e) {
-            event.getGuild().getController().createTextChannel(Config.CHANNEL_LOG_LISTENER).setTopic("This is the log-channel for the <@388355915583324160>.").
+            event.getGuild().createTextChannel(Config.CHANNEL_LOG_LISTENER).setTopic("This is the log-channel for the <@388355915583324160>.").
                     queue();
         }
     }
@@ -103,7 +103,7 @@ public class LogListener extends ListenerAdapter {
                     new Color(90, 10, 10),
                     "left the guild");
         } catch (IndexOutOfBoundsException e) {
-            event.getGuild().getController().createTextChannel(Config.CHANNEL_LOG_LISTENER).setTopic("This is the log-channel for the <@388355915583324160>.").
+            event.getGuild().createTextChannel(Config.CHANNEL_LOG_LISTENER).setTopic("This is the log-channel for the <@388355915583324160>.").
                     queue();
         }
     }

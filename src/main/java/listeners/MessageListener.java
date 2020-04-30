@@ -1,14 +1,12 @@
 package listeners;
 
-        import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
-        import net.dv8tion.jda.core.hooks.ListenerAdapter;
-        import core.CommandHandler;
-        import util.Config;
-        import util.MessageMask;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import core.CommandHandler;
+import util.Config;
 
-        import java.awt.*;
-        import java.io.IOException;
-        import java.text.ParseException;
+import java.io.IOException;
+import java.text.ParseException;
 
 public class MessageListener extends ListenerAdapter {
 

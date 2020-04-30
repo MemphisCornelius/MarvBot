@@ -1,25 +1,26 @@
 package core;
 
 import commands.CmdDVCbGIgnore;
-import net.dv8tion.jda.core.audit.ActionType;
-import net.dv8tion.jda.core.audit.AuditLogEntry;
-import net.dv8tion.jda.core.audit.AuditLogKey;
-import net.dv8tion.jda.core.entities.Member;
-import net.dv8tion.jda.core.entities.VoiceChannel;
-import net.dv8tion.jda.core.events.channel.voice.VoiceChannelCreateEvent;
-import net.dv8tion.jda.core.events.channel.voice.VoiceChannelDeleteEvent;
-import net.dv8tion.jda.core.events.channel.voice.update.VoiceChannelUpdateNameEvent;
-import net.dv8tion.jda.core.events.guild.GuildJoinEvent;
-import net.dv8tion.jda.core.events.guild.GuildLeaveEvent;
-import net.dv8tion.jda.core.events.guild.voice.GuildVoiceJoinEvent;
-import net.dv8tion.jda.core.events.guild.voice.GuildVoiceLeaveEvent;
-import net.dv8tion.jda.core.events.guild.voice.GuildVoiceMoveEvent;
-import net.dv8tion.jda.core.events.user.update.UserUpdateGameEvent;
-import net.dv8tion.jda.core.hooks.ListenerAdapter;
-import net.dv8tion.jda.core.requests.restaction.pagination.AuditLogPaginationAction;
+import net.dv8tion.jda.api.audit.ActionType;
+import net.dv8tion.jda.api.audit.AuditLogEntry;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.VoiceChannel;
+import net.dv8tion.jda.api.events.channel.voice.VoiceChannelCreateEvent;
+import net.dv8tion.jda.api.events.channel.voice.VoiceChannelDeleteEvent;
+import net.dv8tion.jda.api.events.channel.voice.update.VoiceChannelUpdateNameEvent;
+import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
+import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
+import net.dv8tion.jda.api.events.guild.voice.GuildVoiceJoinEvent;
+import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
+import net.dv8tion.jda.api.events.guild.voice.GuildVoiceMoveEvent;
+import net.dv8tion.jda.api.events.user.UserActivityEndEvent;
+import net.dv8tion.jda.api.events.user.UserActivityStartEvent;
+import net.dv8tion.jda.api.events.user.update.UserUpdateActivityOrderEvent;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.requests.restaction.pagination.AuditLogPaginationAction;
 import util.Config;
 
-import java.io.*;
+import javax.annotation.Nonnull;
 import java.sql.*;
 import java.util.*;
 
@@ -116,25 +117,20 @@ public class DVCbGHandler extends ListenerAdapter {
         int i;
 
         if (members.size() == 1) {
-            try {
-                return vc.getMembers().get(0).getGame().getName();
-            } catch (NullPointerException e) {
-                return "";
-            }
-
+                return vc.getMembers().get(0).getActivities().size() > 0 ? vc.getMembers().get(0).getActivities().get(0).getName() : "";
         }
 
         for (Member m : members) {
-            if (m.getGame() != null) {
+            if (m.getActivities().size() > 0) {
                 for (Member m1 : members) {
-                    if (m1.getGame() != null) {
+                    if (m1.getActivities().size() > 0) {
                         if (!m.getUser().getId().equals(m1.getUser().getId())) {
-                            if (m.getGame().getName().equalsIgnoreCase(m1.getGame().getName())) {
-                                if (!games.containsKey(m.getGame().getName())) {
-                                    games.put(m.getGame().getName(), 1);
+                            if (m.getActivities().get(0).getName().equalsIgnoreCase(m1.getActivities().get(0).getName())) {
+                                if (!games.containsKey(m.getActivities().get(0).getName())) {
+                                    games.put(m.getActivities().get(0).getName(), 1);
                                 } else {
-                                    int newValue = games.get(m.getGame().getName()) + 1;
-                                    games.replace(m.getGame().getName(), games.get(m.getGame().getName()), newValue);
+                                    int newValue = games.get(m.getActivities().get(0).getName()) + 1;
+                                    games.replace(m.getActivities().get(0).getName(), games.get(m.getActivities().get(0).getName()), newValue);
                                 }
                             }
                         }
@@ -203,7 +199,7 @@ public class DVCbGHandler extends ListenerAdapter {
     @Override
     public void onVoiceChannelUpdateName(VoiceChannelUpdateNameEvent event) {
 
-        AuditLogPaginationAction auditLogs = event.getGuild().getAuditLogs();
+        AuditLogPaginationAction auditLogs = event.getGuild().retrieveAuditLogs();
         auditLogs.type(ActionType.CHANNEL_UPDATE);
         auditLogs.limit(1);
         auditLogs.queue((entries) -> {
@@ -230,10 +226,25 @@ public class DVCbGHandler extends ListenerAdapter {
     }
 
     @Override
-    public void onUserUpdateGame(UserUpdateGameEvent event) {
+    public void onUserUpdateActivityOrder(@Nonnull UserUpdateActivityOrderEvent event) {
         if (event.getMember().getVoiceState().inVoiceChannel()) {
             setNameToGame(event.getMember().getVoiceState().getChannel());
         }
+    }
+
+    @Override
+    public void onUserActivityStart(@Nonnull UserActivityStartEvent event) {
+        if (event.getMember().getVoiceState().inVoiceChannel()) {
+            setNameToGame(event.getMember().getVoiceState().getChannel());
+        }
+    }
+
+    @Override
+    public void onUserActivityEnd(@Nonnull UserActivityEndEvent event) {
+        if (event.getMember().getVoiceState().inVoiceChannel()) {
+            setNameToGame(event.getMember().getVoiceState().getChannel());
+        }
+
     }
 
     @Override
