@@ -78,7 +78,7 @@ public class CmdAutochannel implements Command, Serializable {
 
             CmdDVCbGIgnore.add(vcid, g.getId());
 
-            String sql = "INSERT INTO autoChan VALUES (?, ?)";
+            String sql = "INSERT INTO autoChan VALUES (?, ?, null)";
 
             try (Connection con = DriverManager.getConnection(url, usr, pw);
                  PreparedStatement pst = con.prepareStatement(sql)) {
