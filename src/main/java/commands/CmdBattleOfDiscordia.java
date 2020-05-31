@@ -412,8 +412,10 @@ public class CmdBattleOfDiscordia implements Command {
                                     @Override
                                     public void run() {
                                         try {
-                                            message1.clearReactions().queue();
-                                            moveReactionMessage.remove(message1.getId());
+                                            if( message1.getReactions().size() > 0) {
+                                                message1.clearReactions().queue();
+                                                moveReactionMessage.remove(message1.getId());
+                                            }
                                         } catch (ErrorResponseException e) {}
                                     }
                                 }, 60000);
