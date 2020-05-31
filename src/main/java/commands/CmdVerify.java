@@ -16,9 +16,13 @@ public class CmdVerify implements Command {
 
     @Override
     public boolean action(String[] args, MessageReceivedEvent event) throws ParseException, IOException {
-        event.getGuild().modifyMemberRoles(
-                event.getMember(), event.getGuild().getRoleById(CmdSet.configList.get(event.getGuild().getId()).get("verify"))).queue();
-        event.getMessage().delete().queueAfter(5, TimeUnit.SECONDS);
+        if(!event.getMember().getRoles().contains(event.getGuild().getRoleById(CmdSet.configList.get(event.getGuild().getId()).get("verify")))) {
+            System.out.println("a");
+            event.getGuild().addRoleToMember(
+                    event.getMember(),
+                    event.getGuild().getRoleById(CmdSet.configList.get(event.getGuild().getId()).get("verify"))).queue();
+            event.getMessage().delete().queueAfter(5, TimeUnit.SECONDS);
+        }
 
         return false;
     }
