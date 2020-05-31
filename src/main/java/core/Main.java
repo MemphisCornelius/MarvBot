@@ -5,46 +5,51 @@ import listeners.LogListener;
 import listeners.MessageListener;
 import listeners.ReactionListener;
 import listeners.ReadyListener;
-import net.dv8tion.jda.api.AccountType;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.requests.GatewayIntent;
 import util.Config;
 
 import javax.security.auth.login.LoginException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Main {
-
-    private static JDABuilder builder;
 
     public static void main(String[] args) {
 
         ServerSettingsHandler.initializeSettings();
 
-        builder = new JDABuilder(AccountType.BOT);
+        List<GatewayIntent> gatewayIntents = new ArrayList<>();
+        gatewayIntents.add(GatewayIntent.DIRECT_MESSAGE_REACTIONS);
+        gatewayIntents.add(GatewayIntent.DIRECT_MESSAGES);
+        gatewayIntents.add(GatewayIntent.GUILD_BANS);
+        gatewayIntents.add(GatewayIntent.GUILD_EMOJIS);
+        gatewayIntents.add(GatewayIntent.GUILD_INVITES);
+        gatewayIntents.add(GatewayIntent.GUILD_MEMBERS);
+        gatewayIntents.add(GatewayIntent.GUILD_MESSAGE_REACTIONS);
+        gatewayIntents.add(GatewayIntent.GUILD_MESSAGES);
+        gatewayIntents.add(GatewayIntent.GUILD_PRESENCES);
+        gatewayIntents.add(GatewayIntent.GUILD_VOICE_STATES);
 
-        builder.setToken(ServerSettingsHandler.getToken());
-        builder.setAutoReconnect(true);
-        builder.setActivity(Activity.of(Activity.ActivityType.LISTENING, Config.GAME));
-
-        addListeners();
         addCommands();
 
         try {
-            builder.build().awaitReady();
-        } catch (LoginException | InterruptedException e) {
+            JDABuilder.create(ServerSettingsHandler.getToken(), gatewayIntents)
+                    .setAutoReconnect(true)
+                    .setActivity(Activity.of(Activity.ActivityType.LISTENING, Config.GAME))
+                    .addEventListeners(new ReadyListener(),
+                            new MessageListener(),
+                            new AutochannelHandler(),
+                            new DVCbGHandler(),
+                            new AutoroleHandler(),
+                            new ReactionListener(),
+                            new LogListener())
+                    .build()
+                    .awaitReady();
+        } catch (InterruptedException | LoginException e) {
             e.printStackTrace();
         }
-    }
-
-    //LISTENERS
-    private static void addListeners() {
-        builder.addEventListeners(new ReadyListener());
-        builder.addEventListeners(new MessageListener());
-        builder.addEventListeners(new AutoroleHandler());
-        builder.addEventListeners(new DVCbGHandler());
-        builder.addEventListeners(new AutochannelHandler());
-        builder.addEventListeners(new ReactionListener());
-        builder.addEventListeners(new LogListener());
     }
 
     //COMMANDS
@@ -59,7 +64,7 @@ public class Main {
         CommandHandler.commands.put(Config.CMD_SHUTDOWN, new CmdShutdown());
         CommandHandler.commands.put(Config.CMD_VERSION, new CmdVersion());
         //CommandHandler.commands.put(Config.CMD_GITHUBISSUE, new CmdGithubIssue());
-        //CommandHandler.commands.put(Config.CMD_AUTOROLE, new CmdAutorole());
+        CommandHandler.commands.put(Config.CMD_AUTOROLE, new CmdAutorole());
         CommandHandler.commands.put(Config.CMD_initializeDVCbG, new CmdDVCbGInitialize());
         CommandHandler.commands.put(Config.CMD_DVCBGIGNORE, new CmdDVCbGIgnore());
         CommandHandler.commands.put(Config.CMD_BATTLEOFDISCORDIA, new CmdBattleOfDiscordia());
