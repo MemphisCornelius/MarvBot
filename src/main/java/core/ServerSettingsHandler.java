@@ -55,9 +55,6 @@ public class ServerSettingsHandler {
     }
 
     static String getToken() { return settings.get("DISCORD_TOKEN"); }
-    public static String getGHLogin() { return settings.get("GITHUB_LOGIN"); }
-    public static String getGHOA() { return  settings.get("GITHUB_OA"); }
-    public static String getGHPW() { return settings.get("GITHUB_PW"); }
     public static String getDBUS() { return settings.get("DB_USER"); }
     public static String getDBPW() { return settings.get("DB_PASSWORD"); }
     public static String getDBURL() { return settings.get("DB_URL"); }

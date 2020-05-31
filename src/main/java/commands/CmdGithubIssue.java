@@ -1,4 +1,4 @@
-package commands;
+/*package commands;
 
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
@@ -89,3 +89,4 @@ public class CmdGithubIssue implements Command {
         return null;
     }
 }
+*/

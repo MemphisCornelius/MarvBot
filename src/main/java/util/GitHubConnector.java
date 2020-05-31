@@ -1,4 +1,4 @@
-package util;
+/*package util;
 
 import core.ServerSettingsHandler;
 
@@ -35,3 +35,4 @@ public class GitHubConnector {
         return repo;
     }
 }
+*/
