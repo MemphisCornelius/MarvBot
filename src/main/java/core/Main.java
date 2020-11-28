@@ -1,10 +1,7 @@
 package core;
 
 import commands.*;
-import listeners.LogListener;
-import listeners.MessageListener;
-import listeners.ReactionListener;
-import listeners.ReadyListener;
+import listeners.*;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.requests.GatewayIntent;
@@ -44,7 +41,8 @@ public class Main {
                             new DVCbGHandler(),
                             new AutoroleHandler(),
                             new ReactionListener(),
-                            new LogListener())
+                            new LogListener(),
+                            new InvitesListener())
                     .build()
                     .awaitReady();
         } catch (InterruptedException | LoginException e) {
@@ -72,6 +70,7 @@ public class Main {
         CommandHandler.commands.put(Config.CMD_KICK, new CmdKick());
         CommandHandler.commands.put(Config.CMD_SET, new CmdSet());
         CommandHandler.commands.put(Config.CMD_VERIFY, new CmdVerify());
+        CommandHandler.commands.put(Config.CMD_INVITES, new CmdInvites());
 
     }
 }

@@ -43,7 +43,7 @@ public class CmdSet implements Command {
 
     private void removeFromDatabase(String gid, String type) {
 
-        String sql = "DELETE FROM cconfigTable WHERE gid = ? AND type = ?";
+        String sql = "DELETE FROM configTable WHERE gid = ? AND type = ?";
 
         try (Connection con = DriverManager.getConnection(url, usr, pw);
              PreparedStatement pst = con.prepareStatement(sql)) {
@@ -129,8 +129,27 @@ public class CmdSet implements Command {
                         case "autorole":
                             mentioned = event.getMessage().getMentionedRoles().get(0);
                             configList.get(gid).put("autorole", mentioned.getId());
-                            MessageMask.msg(event.getTextChannel(), event.getAuthor(), Color.GREEN, "Successfully set @" + mentioned.getName() + " as a auto role!");
+                            MessageMask.msg(event.getTextChannel(), event.getAuthor(), Color.GREEN, "Successfully set @" + mentioned.getName() + " as an auto role!");
                             addToDatabase(gid, "autorole", mentioned.getId());
+                            break;
+                        case "inviteRole":
+                            mentioned = event.getMessage().getMentionedRoles().get(0);
+                            configList.get(gid).put("inviteRole", mentioned.getId());
+                            MessageMask.msg(event.getTextChannel(), event.getAuthor(), Color.GREEN, "Successfully set @" + mentioned.getName() + " as an invite-role!");
+                            addToDatabase(gid, "inviteRole", mentioned.getId());
+                            break;
+                        case "inviteNumber":
+
+                            try {
+                                int i = Integer.parseInt(args[1]);
+                                configList.get(gid).put("inviteNumber", String.valueOf(i));
+                                MessageMask.msg(event.getTextChannel(), event.getAuthor(), Color.GREEN, "Successfully set **" + i + "** as  invite-number!");
+                                addToDatabase(gid, "inviteNumber", String.valueOf(i));
+                            }catch (NumberFormatException e) {
+                                MessageMask.msg(event.getTextChannel(), event.getAuthor(), Color.RED, Config.ERROR_THUMBNAIL, "**" + args[1] + "** is not a valid number");
+                            }
+
+
                             break;
                         case "remove":
                             boolean exists = false;
@@ -139,6 +158,8 @@ public class CmdSet implements Command {
                                 case "moderation":
                                 case "modlog":
                                 case "autorole":
+                                case "inviteRole":
+                                case "inviteNumber":
                                     exists = true;
                             }
 

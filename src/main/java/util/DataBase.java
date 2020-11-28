@@ -103,6 +103,12 @@ public class DataBase {
                 " value VARCHAR(18)," +
                 " PRIMARY KEY (gid, type))";
 
+        String inviteTable = "CREATE TABLE IF NOT EXISTS  inviteTable" +
+                "(gid VARCHAR(18) NOT NULL," +
+                " uid VARCHAR(20) NOT NULL," +
+                " value INTEGER," +
+                " PRIMARY KEY (gid, uid))";
+
         try {
 
             Connection conn = DriverManager.getConnection(url, usr, pw);
@@ -120,6 +126,7 @@ public class DataBase {
             stmt.addBatch(resetsTable);
             stmt.addBatch(autochanTable);
             stmt.addBatch(setTable);
+            stmt.addBatch(inviteTable);
             stmt.addBatch("INSERT IGNORE INTO player VALUES (0, NULL, NULL, NULL, NULL, NULL )");
 
             stmt.executeBatch();

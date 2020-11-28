@@ -9,8 +9,8 @@ import util.Config;
 import util.MessageMask;
 import util.Time;
 
-import java.awt.Color;
-import java.time.*;
+import java.awt.*;
+import java.time.Instant;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -34,7 +34,7 @@ public class CmdPoke implements Command {
         if (args.length > 1 && args[0].startsWith("@") && !event.getMessage().getMentionedMembers().get(0).getUser().isBot()) {
 
             String content = event.getMessage().getContentDisplay();
-            content = content.replaceFirst(Config.PREFIX , "");
+            content = content.replaceFirst(Config.PREFIX, "");
             content = content.replaceFirst(Config.CMD_POKE, "");
             content = content.replaceFirst("@", "");
             content = content.replace(event.getMessage().getMentionedMembers().get(0).getEffectiveName(), "");
@@ -42,13 +42,14 @@ public class CmdPoke implements Command {
 
             event.getMessage().getMentionedMembers().get(0).getUser().openPrivateChannel().queue((channel) ->
                     channel.sendMessage(
-                    new EmbedBuilder().setColor(Color.blue).setAuthor(
-                            event.getMessage().getAuthor().getName() + " from #" + event.getGuild().getName(),
-                            null, event.getMessage().getAuthor().
-                            getEffectiveAvatarUrl()).setTitle("pokes you:").setDescription(
-                            finalContent
-                    ).setTimestamp(Instant.now()).setFooter("ID: " + event.getMessage().getAuthor().getId(), null).build()
-            ).queue());
+                            new EmbedBuilder().setColor(Color.blue).setAuthor(
+                                    event.getMessage().getAuthor().getName() + " from #" + event.getGuild().getName(),
+                                    null, event.getMessage().getAuthor().
+                                            getEffectiveAvatarUrl()).setTitle("pokes you:").setDescription(
+                                    finalContent
+                            ).setTimestamp(Instant.now()).setFooter("ID: " + event.getMessage().getAuthor().getId(), null).build()
+                    ).queue()
+            );
 
             new Timer().schedule(new TimerTask() {
                 @Override
@@ -71,7 +72,7 @@ public class CmdPoke implements Command {
 
         } else {
 
-            MessageMask.msg(tc, user, Color.RED,Config.ERROR_THUMBNAIL, "Invalid arguments!\n\n\n" +
+            MessageMask.msg(tc, user, Color.RED, Config.ERROR_THUMBNAIL, "Invalid arguments!\n\n\n" +
                     String.format("Usage:\n\n\\%s %s <User> <Message>\n", Config.PREFIX, Config.CMD_POKE));
 
         }

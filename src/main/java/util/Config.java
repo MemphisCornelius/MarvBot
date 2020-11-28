@@ -47,7 +47,7 @@ public class Config {
     public static final String CMD_KICK = "kick";
     public static final String CMD_SET = "set";
     public static final String CMD_VERIFY = "verify";
-
+    public static final String CMD_INVITES = "invites";
 
 
     //UTILS
